@@ -4,6 +4,7 @@ import dao.DeveloperDAO;
 import dao.jdbc.JdbcDeveloperDAOImpl;
 import model.Developer;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
@@ -30,9 +31,8 @@ public class DeveloperController {
             System.out.println("0 - Previous menu");
 
 
-            int choise = 0;
             if (scan.hasNextInt()) {
-                choise = scan.nextInt();
+                int choise = scan.nextInt();
                 if (choise == 1) {
                     createNewDeveloper();
                 } else if (choise == 2) {
@@ -50,7 +50,6 @@ public class DeveloperController {
                 }
             }
         }
-
     }
 
     private void showDevById() {
@@ -65,15 +64,33 @@ public class DeveloperController {
     }
 
     private void deleteDeveloper() {
-        System.out.println("Delete");
+        System.out.println("Input developer id");
+        long devId = scan.nextLong();
+        try {
+            developerDAO.delete(new Developer(devId));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void changeDeveloper() {
-        System.out.println("Update");
+        System.out.println("Input developer id");
+        long devId = scan.nextLong();
+        System.out.println("Input developer first_name");
+        scan.nextLine();
+        String devFirstName = scan.nextLine();
+        System.out.println("Input developer last_name");
+        String devLastName = scan.nextLine();
+        System.out.println("Input developer salary");
+        long devSalary = scan.nextLong();
+        try {
+            developerDAO.update(new Developer(devId, devFirstName, devLastName, new BigDecimal(devSalary)));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAllDevlopers() {
-
         try {
             List<Developer> developers = developerDAO.getAll();
             for(int i = 0; i < developers.size(); i++){
@@ -86,6 +103,19 @@ public class DeveloperController {
     }
 
     private void createNewDeveloper() {
-        System.out.println("Create");
+        System.out.println("Input developer id");
+        long devId = scan.nextLong();
+        System.out.println("Input developer first_name");
+        scan.nextLine();
+        String devFirstName = scan.nextLine();
+        System.out.println("Input developer last_name");
+        String devLastName = scan.nextLine();
+        System.out.println("Input developer salary");
+        long devSalary = scan.nextLong();
+        try {
+            developerDAO.save(new Developer(devId, devFirstName, devLastName, new BigDecimal(devSalary)));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

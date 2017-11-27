@@ -1,6 +1,6 @@
 package controller;
 
-import dao.jdbc.JdbcDeveloperDAOImpl;
+import dao.jdbc.*;
 
 import java.util.Scanner;
 
@@ -10,7 +10,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         DeveloperController developerController = new DeveloperController(new JdbcDeveloperDAOImpl());
-        SkillController skillController = new SkillController();
+        SkillController skillController = new SkillController(new JdbcSkillDAOImpl());
+        ProjectController projectController = new ProjectController(new JdbcProjectImpl());
+        CustomerController customerController = new CustomerController(new JdbcCustomerImpl());
+        CompanyController companyController = new CompanyController(new JdbcCompanieImpl());
 
         while (true) {
             System.out.println("1 - Developers");
@@ -28,11 +31,11 @@ public class Main {
                 } else if (choise == 2) {
                     skillController.menu();
                 } else if (choise == 3) {
-                    //
+                    companyController.menu();
                 } else if (choise == 4) {
-                    //
+                    customerController.menu();
                 } else if (choise == 5) {
-                    //
+                    projectController.menu();
                 } else if (choise == 0) {
                     break;
                 }

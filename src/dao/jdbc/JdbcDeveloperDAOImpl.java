@@ -5,6 +5,7 @@ import dao.DeveloperDAO;
 import model.Developer;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,7 +19,8 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
     @Override
     public Developer getById(Long id) throws SQLException {
         String sql = "SELECT * FROM developers WHERE id_developer = " + id;
-        Statement statement = ConnectionUtil.getConnection().createStatement();
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
         Developer developer = new Developer();
@@ -27,7 +29,6 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
             Long developerId = resultSet.getLong("id_developer");
             String firstName = resultSet.getString("first_name");
             String lastName = resultSet.getString("last_name");
-            //String specialty = resultSet.getString("specialty");
             BigDecimal salary = resultSet.getBigDecimal("salary_developers");
 
             developer.withId(developerId)
@@ -36,7 +37,9 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
                     .withSalary(salary);
         }
 
-
+        resultSet.close();
+        statement.close();
+        connection.close();
         return developer;
     }
 
@@ -44,7 +47,8 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
     public List<Developer> getAll() throws SQLException {
         List<Developer> developers = new ArrayList<>();
         String sql = "SELECT * FROM developers";
-        Statement statement = ConnectionUtil.getConnection().createStatement();
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
 
@@ -54,7 +58,6 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
             Long developerId = resultSet.getLong("id_developer");
             String firstName = resultSet.getString("first_name");
             String lastName = resultSet.getString("last_name");
-            //String specialty = resultSet.getString("specialty");
             BigDecimal salary = resultSet.getBigDecimal("salary_developers");
 
             developer.withId(developerId)
@@ -65,21 +68,48 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
             developers.add(developer);
         }
 
+        resultSet.close();
+        statement.close();
+        connection.close();
         return developers;
     }
 
     @Override
-    public void save(Developer developer) {
-
+    public void save(Developer developer) throws SQLException {
+        String sql = "INSERT INTO developers (id_developer, first_name, last_name, salary_developers) VALUES " +
+                "("+developer.getId()+ ",'" + developer.getFirstName()+"','"+developer.getLastName()+"',"+developer.getSalary()+")";
+        System.out.println(sql);
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        statement.close();
+        connection.close();
     }
 
     @Override
-    public void update(Developer developer) {
-
+    public void update(Developer developer) throws SQLException {
+        String sql = "UPDATE developers SET id_developer = "+developer.getId()+", first_name='"+developer.getFirstName()+
+                "', last_name = '"+developer.getLastName()+"', salary_developers = "+developer.getSalary()+" WHERE id_developer = " +
+                developer.getId();
+        System.out.println(sql);
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        statement.close();
+        connection.close();
     }
 
     @Override
-    public void delete(Developer developer) {
-
+    public void delete(Developer developer) throws SQLException {
+        String sqlDelDevRefSkill = "DELETE FROM developer_skill WHERE id_developer = " + developer.getId();
+        String sqlDelDevRefProj = "DELETE FROM project_developer WHERE id_developer = " + developer.getId();
+        String sqlDelDev = "DELETE FROM developers WHERE id_developer = " + developer.getId();
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sqlDelDevRefSkill);
+        statement.executeUpdate(sqlDelDevRefProj);
+        statement.executeUpdate(sqlDelDev);
+        statement.close();
+        connection.close();
     }
 }

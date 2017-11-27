@@ -9,17 +9,19 @@ public class Developer {
     private Long id;
     private String firstName;
     private String lastName;
-
     private BigDecimal salary;
 
     public Developer() {
     }
 
-    public Developer(Long id, String firstName, String lastName,  BigDecimal salary) {
+    public Developer(Long id) {
+        this.id = id;
+    }
+
+    public Developer(Long id, String firstName, String lastName, BigDecimal salary) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-
         this.salary = salary;
     }
 
@@ -46,8 +48,6 @@ public class Developer {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
-
 
     public BigDecimal getSalary() {
         return salary;
