@@ -18,6 +18,10 @@ public class Customer {
 
     }
 
+    public Customer(Long idCustomer) {
+        this.idCustomer = idCustomer;
+    }
+
     public Long getIdCustomer() {
         return idCustomer;
     }

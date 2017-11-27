@@ -25,14 +25,16 @@ public class JdbcCustomerImpl implements CustomerDAO {
 
         Customer customer = new Customer();
 
-        while (resultSet.next()) {
+        if (resultSet.next()) {
             Long customerId = resultSet.getLong("id_customers");
-            String firstNameCustomer = resultSet.getString("first_name_customer");
-            String lastNameCustomer = resultSet.getString("last_name_customer");
+            String firstNameCustomer = resultSet.getString("first_name_customers");
+            String lastNameCustomer = resultSet.getString("last_name_customers");
 
             customer.withIdCust(customerId)
                     .withFirstNameCust(firstNameCustomer)
                     .withLastNameCust(lastNameCustomer);
+        }else {
+            System.out.println("No customer with this ID!!!");
         }
 
         return customer;
@@ -48,12 +50,12 @@ public class JdbcCustomerImpl implements CustomerDAO {
         while (resultSet.next()) {
             Customer customer = new Customer();
             Long customerId = resultSet.getLong("id_customer");
-            String firstNameCustomer = resultSet.getString("firstNameCustomer");
-            String lastNameCustomer = resultSet.getString("lastNameCustomer");
+            String firstNameCustomer = resultSet.getString("first_name_customers");
+            String lastNameCustomer = resultSet.getString("last_name_customers");
 
             customer.withIdCust(customerId)
                     .withFirstNameCust(firstNameCustomer)
-                    .withLastNameCust(firstNameCustomer);
+                    .withLastNameCust(lastNameCustomer);
 
             customers.add(customer);
         }
@@ -87,7 +89,7 @@ public class JdbcCustomerImpl implements CustomerDAO {
 
     @Override
     public void delete(Customer customer) throws SQLException {
-        String sqlDelCustRefProj = "DELETE FROM customers_project WHERE id_customer = " + customer.getIdCustomer();
+        String sqlDelCustRefProj = "DELETE FROM customers_project WHERE id_customers = " + customer.getIdCustomer();
         String sqlDelCust = "DELETE FROM customers WHERE id_customers = " + customer.getIdCustomer();
         Connection connection = ConnectionUtil.getConnection();
         Statement statement = connection.createStatement();

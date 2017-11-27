@@ -77,9 +77,9 @@ public class ProjectController {
         scan.nextLine();
         String projName = scan.nextLine();
         System.out.println("Input project cost");
-        long projCost = scan.nextLong();
+        int projCost = scan.nextInt();
         try {
-            projectDAO.update(new Project(projectId, projName, new Integer(projCost)));
+            projectDAO.update(new Project(projectId, projName, projCost));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -92,9 +92,9 @@ public class ProjectController {
         scan.nextLine();
         String projectName = scan.nextLine();
         System.out.println("Input project cost");
-        long projCost = scan.nextLong();
+        int projCost = scan.nextInt();
         try {
-            projectDAO.save(new Project(projectId, projectName, new Integer(projCost)));
+            projectDAO.save(new Project(projectId, projectName, projCost));
         } catch (SQLException e) {
             e.printStackTrace();
         }

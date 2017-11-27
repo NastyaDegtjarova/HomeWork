@@ -17,6 +17,10 @@ public class Project {
         this.cost = cost;
     }
 
+    public Project(Long idProject) {
+        this.idProject = idProject;
+    }
+
     public Long getIdProj() {
         return idProject;
     }

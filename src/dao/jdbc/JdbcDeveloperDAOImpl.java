@@ -23,9 +23,10 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
-        Developer developer = new Developer();
 
-        while (resultSet.next()) {
+
+        if (resultSet.next()) {
+            Developer developer = new Developer();
             Long developerId = resultSet.getLong("id_developer");
             String firstName = resultSet.getString("first_name");
             String lastName = resultSet.getString("last_name");
@@ -35,12 +36,15 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
                     .withFirstName(firstName)
                     .withLastName(lastName)
                     .withSalary(salary);
+            return developer;
+        }else {
+            System.out.println("No developer with this ID!!!");
         }
 
         resultSet.close();
         statement.close();
         connection.close();
-        return developer;
+        return null;
     }
 
     @Override

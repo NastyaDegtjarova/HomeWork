@@ -23,17 +23,21 @@ public class JdbcCompanieImpl implements CompanieDAO {
         Statement statement = ConnectionUtil.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
-        Companie companie = new Companie();
 
-        while (resultSet.next()) {
+
+        if (resultSet.next()) {
+            Companie companie = new Companie();
             Long companiId = resultSet.getLong("id_companies");
             String nameCompanies = resultSet.getString("name_companies");
 
             companie.withId_comp(companiId)
                     .withNameComp(nameCompanies);
+            return companie;
+        }else {
+            System.out.println("No company with this ID!!!");
         }
 
-        return companie;
+        return null;
     }
 
     @Override
@@ -72,7 +76,7 @@ public class JdbcCompanieImpl implements CompanieDAO {
     @Override
     public void update(Companie companie) throws SQLException {
         String sql = "UPDATE companies SET id_companies = "+companie.getId_comp()+", name_companies='"+companie.getName_comp()
-                +"' WHERE id_companies = " + companie.getName_comp();
+                +"' WHERE id_companies = " + companie.getId_comp();
         System.out.println(sql);
         Connection connection = ConnectionUtil.getConnection();
         Statement statement = connection.createStatement();

@@ -24,9 +24,10 @@ public class JdbcProjectImpl implements ProjectDAO {
         Statement statement = ConnectionUtil.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
-        Project project = new Project();
 
-        while (resultSet.next()) {
+
+        if (resultSet.next()) {
+            Project project = new Project();
             Long projId = resultSet.getLong("id_projects");
             String name_projects = resultSet.getString("name_projects");
             Integer cost = resultSet.getInt("cost");
@@ -34,9 +35,12 @@ public class JdbcProjectImpl implements ProjectDAO {
             project.withIdProj(projId)
                     .withNameProj(name_projects)
                     .withCost(cost);
-        }
+            return project;
+        }else {
+                System.out.println("No project with this ID!!!");
+            }
 
-        return project;
+        return null;
     }
 
     @Override
@@ -76,8 +80,8 @@ public class JdbcProjectImpl implements ProjectDAO {
 
     @Override
     public void update(Project project) throws SQLException {
-        String sql = "UPDATE projects SET id_projects = "+project.getIdProj()+", name_project='"+project.getNameProject()+
-                "', cost = "+ project.getCost() +" WHERE id_project = " + project.getIdProj();
+        String sql = "UPDATE projects SET id_projects = "+project.getIdProj()+", name_projects ='"+project.getNameProject()+
+                "', cost = "+ project.getCost() +" WHERE id_projects = " + project.getIdProj();
         System.out.println(sql);
         Connection connection = ConnectionUtil.getConnection();
         Statement statement = connection.createStatement();
@@ -89,7 +93,7 @@ public class JdbcProjectImpl implements ProjectDAO {
     @Override
     public void delete(Project project) throws SQLException {
         String sqlDelDevRefProj = "DELETE FROM project_developer WHERE id_project = " + project.getIdProj();
-        String sqlDelCustRefProj = "DELETE FROM customer_project WHERE id_project = " + project.getIdProj();
+        String sqlDelCustRefProj = "DELETE FROM customers_project WHERE id_project = " + project.getIdProj();
         String sqlDelCompRefProj = "DELETE FROM companies_project WHERE id_project = " + project.getIdProj();
         String sqlDelProj = "DELETE FROM projects WHERE id_projects = " + project.getIdProj();
         Connection connection = ConnectionUtil.getConnection();

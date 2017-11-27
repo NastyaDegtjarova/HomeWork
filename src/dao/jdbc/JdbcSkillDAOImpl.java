@@ -23,17 +23,21 @@ public class JdbcSkillDAOImpl implements SkillDAO {
         Statement statement = ConnectionUtil.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
-        Skill skill = new Skill();
 
-        while (resultSet.next()) {
+
+        if (resultSet.next()) {
+            Skill skill = new Skill();
             Long skillId = resultSet.getLong("id_skills");
             String specialty = resultSet.getString("specialty");
 
             skill.withId_skill(skillId)
                     .withSpecialty(specialty);
+            return skill;
+        }else {
+            System.out.println("No skill with this ID!!!");
         }
 
-        return skill;
+        return null;
     }
 
     @Override

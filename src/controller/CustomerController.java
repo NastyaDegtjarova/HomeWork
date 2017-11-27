@@ -75,7 +75,6 @@ public class CustomerController {
         scan.nextLine();
         String firstNameCustomer = scan.nextLine();
         System.out.println("Input lastNameCustomer");
-        scan.nextLine();
         String lastNameCustomer = scan.nextLine();
         try {
             customerDAO.update(new Customer(customerId, firstNameCustomer, lastNameCustomer));
@@ -91,7 +90,6 @@ public class CustomerController {
         scan.nextLine();
         String firstNameCustomer = scan.nextLine();
         System.out.println("Input lastNameCustomer");
-        scan.nextLine();
         String lastNameCustomer = scan.nextLine();
         try {
             customerDAO.save(new Customer(customerId, firstNameCustomer, lastNameCustomer));

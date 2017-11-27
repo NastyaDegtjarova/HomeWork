@@ -1,0 +1,6 @@
+0. Checkout project from https://github.com/NastyaDegtjarova/HomeWork
+1. Insatall MySql
+2. Install MySql workbanch
+3. Execute file initDB.sql in workbanch
+4. Execute file populateDB.sql in workbanch
+5. run application
