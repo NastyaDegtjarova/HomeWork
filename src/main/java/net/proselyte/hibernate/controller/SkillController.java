@@ -1,9 +1,12 @@
 package net.proselyte.hibernate.controller;
 
+import net.proselyte.hibernate.dao.DeveloperDAO;
 import net.proselyte.hibernate.dao.SkillDAO;
+import net.proselyte.hibernate.model.Developer;
 import net.proselyte.hibernate.model.Skill;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -11,10 +14,12 @@ import java.util.Scanner;
  */
 public class SkillController {
     private SkillDAO skillDAO;
+    private DeveloperDAO developerDAO;
     private Scanner scan;
 
-    public SkillController(SkillDAO skillDAO) {
+    public SkillController(SkillDAO skillDAO, DeveloperDAO developerDAO) {
         this.skillDAO = skillDAO;
+        this.developerDAO = developerDAO;
         scan = new Scanner(System.in);
     }
 
@@ -24,6 +29,7 @@ public class SkillController {
             System.out.println("2 - View skill");
             System.out.println("3 - Update skill");
             System.out.println("4 - Delete skill");
+            System.out.println("5 - View all skill");
             System.out.println("0 - Previous menu");
 
             int choise = 0;
@@ -37,6 +43,8 @@ public class SkillController {
                     changeSkill();
                 } else if (choise == 4) {
                     deleteSkill();
+                } else if (choise == 5) {
+                    showAllSkills();
                 } else if (choise == 0) {
                     break;
                 }  else {
@@ -52,7 +60,32 @@ public class SkillController {
         long skillId = scan.nextLong();
         try {
             Skill skill = skillDAO.getById(skillId);
+            setDeps(skill);
             System.out.println(skill);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAllSkills() {
+        try {
+            List<Skill> skills = skillDAO.getAll();
+            for(int i = 0; i < skills.size(); i++){
+                Skill skill = skills.get(i);
+                setDeps(skill);
+                System.out.println(skill);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setDeps(Skill skill) {
+        try {
+            List<Developer> developers = developerDAO.getByProjId(skill.getIdSkill());
+            skill.setDevelopers(developers);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

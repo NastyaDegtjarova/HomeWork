@@ -1,7 +1,6 @@
 package net.proselyte.hibernate.controller;
 
 
-import net.proselyte.hibernate.dao.hibernate.HibernateDeveloperDAOImpl;
 import net.proselyte.hibernate.dao.jdbc.*;
 
 import java.util.Scanner;
@@ -11,11 +10,32 @@ import java.util.Scanner;
  */
 public class Main {
     public static void main(String[] args) {
-        DeveloperController developerController = new DeveloperController(new HibernateDeveloperDAOImpl());
-        SkillController skillController = new SkillController(new JdbcSkillDAOImpl());
-        ProjectController projectController = new ProjectController(new JdbcProjectImpl());
-        CustomerController customerController = new CustomerController(new JdbcCustomerImpl());
-        CompanyController companyController = new CompanyController(new JdbcCompanieImpl());
+        DeveloperController developerController = new DeveloperController(
+                new JdbcDeveloperDAOImpl(),
+                new JdbcProjectDAOImpl(),
+                new JdbcSkillDAOImpl());
+/*        DeveloperController developerController = new DeveloperController(
+                new HibernateDeveloperDAOImpl(),
+                new HibernateProjectDAOImpl(),
+                new HibernateSkiiDAOImpl());*/
+        SkillController skillController = new SkillController(
+                new JdbcSkillDAOImpl(),
+                new JdbcDeveloperDAOImpl()
+        );
+        ProjectController projectController = new ProjectController(
+                new JdbcProjectDAOImpl(),
+                new JdbcDeveloperDAOImpl(),
+                new JdbcCustomerDAOImpl(),
+                new JdbcCompanieDAOImpl()
+        );
+        CustomerController customerController = new CustomerController(
+                new JdbcCustomerDAOImpl(),
+                new JdbcProjectDAOImpl()
+        );
+        CompanyController companyController = new CompanyController(
+                new JdbcCompanieDAOImpl(),
+                new JdbcProjectDAOImpl()
+        );
 
         while (true) {
             System.out.println("1 - Developers");

@@ -89,4 +89,14 @@ public class HibernateDeveloperDAOImpl implements DeveloperDAO {
         session.close();
         return result;
     }
+
+    @Override
+    public List<Developer> getByProjId(Long projId) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public List<Developer> getBySkillId(Long skillId) throws SQLException {
+        return null;
+    }
 }

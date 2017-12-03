@@ -2,6 +2,7 @@ package net.proselyte.hibernate.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Nastya on 20.11.2017.
@@ -21,10 +22,7 @@ public class Customer {
     private String lastNameCust;
 
     @ManyToMany
-    List<Developer> developers;
-
-    @ManyToMany
-    List<Project> projects;
+    private List<Project> projects;
 
     public Customer() {
     }
@@ -64,6 +62,19 @@ public class Customer {
         this.lastNameCust = lastNameCust;
     }
 
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "idCustomer =" + idCustomer +
+                ", firstNameCust ='" + firstNameCust + '\'' +
+                ", lastNameCust ='" + lastNameCust + '\'' +
+                ", projects='" +  (
+                projects == null
+                        ? "[]"
+                        : projects.stream().map(Project::getName).collect(Collectors.toList())) + '\'' +
+                '}';
+    }
+
     public Customer withIdCust(Long idCustomer){
         this.idCustomer = idCustomer;
         return this;
@@ -79,13 +90,7 @@ public class Customer {
         return this;
     }
 
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "idCustomer =" + idCustomer +
-                ", firstNameCust ='" + firstNameCust + '\'' +
-                ", lastNameCust ='" + lastNameCust + '\'' +
-                '}';
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }

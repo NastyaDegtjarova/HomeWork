@@ -3,6 +3,7 @@ package net.proselyte.hibernate.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "developer")
@@ -23,10 +24,10 @@ public class Developer {
     private BigDecimal salary;
 
     @ManyToMany
-    private List<Project> project;
+    private List<Project> projects;
 
     @ManyToMany
-    private List<Project> skill;
+    private List<Skill> skills;
 
     public Developer() {
     }
@@ -74,11 +75,35 @@ public class Developer {
         this.salary = salary;
     }
 
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
+    }
+
     @Override
     public String toString() {
         return "Developer{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
+                ", projects='" +  (
+                projects == null
+                        ? "[]"
+                        :projects.stream().map(Project::getName).collect(Collectors.toList())) + '\'' +
+                ", skills='" +  (
+                skills == null
+                        ? "[]"
+                        :skills.stream().map(Skill::getSpecialty).collect(Collectors.toList())) + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", salary=" + salary +
                 '}';

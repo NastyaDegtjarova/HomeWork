@@ -2,6 +2,7 @@ package net.proselyte.hibernate.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 
@@ -19,10 +20,13 @@ public class Project {
     private int cost;
 
     @ManyToMany
-    List<Developer> developer;
+    private List<Developer> developers;
 
     @ManyToMany
-    List<Customer> customer;
+    private List<Customer> customers;
+
+    @ManyToMany
+    private List<Companie> companies;
 
     public Project() {
     }
@@ -61,23 +65,62 @@ public class Project {
         this.cost = cost;
     }
 
+    public List<Developer> getDevelopers() {
+        return developers;
+    }
+
+    public void setDevelopers(List<Developer> developers) {
+        this.developers = developers;
+    }
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
+
+    public List<Companie> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(List<Companie> companies) {
+        this.companies = companies;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", developers='" +  (
+                developers == null
+                        ? "[]"
+                        :developers.stream().map(Developer::getFirstName).collect(Collectors.toList())) + '\'' +
+                ", companies='" +  (
+                companies == null
+                        ? "[]"
+                        :companies.stream().map(Companie::getNameComp).collect(Collectors.toList())) + '\'' +
+                ", customers='" +  (
+                customers == null
+                        ? "[]"
+                        : customers.stream().map(Customer::getFirstNameCust).collect(Collectors.toList())) + '\'' +
                 '}';
     }
 
     public Project withIdProj(Long projId) {
+        setId(projId);
         return this;
     }
 
     public Project withNameProj(String name_projects) {
+        setName(name_projects);
         return this;
     }
 
     public Project withCost(Integer cost) {
+        setCost(cost);
         return this;
     }
 }

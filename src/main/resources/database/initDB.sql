@@ -9,7 +9,7 @@ id_projects INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 name_projects VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE skill(
+CREATE TABLE skills(
 id_skills INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 specialty VARCHAR(50) NOT NULL
 );
@@ -30,7 +30,7 @@ id_developer INT NOT NULL,
 id_skill INT NOT NULL,
 
 FOREIGN KEY(id_developer) REFERENCES developer(id_developer),
-FOREIGN KEY(id_skill) REFERENCES skill(id_skills),
+FOREIGN KEY(id_skill) REFERENCES skills(id_skills),
 
 UNIQUE(id_developer, id_skill)
 );

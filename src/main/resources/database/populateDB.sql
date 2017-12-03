@@ -15,7 +15,7 @@ INSERT INTO skill VALUES
 (5, 'MYSQL'),
 (6, 'Phiton');
 
-INSERT INTO project VALUES
+INSERT INTO projects VALUES
 (1, 'architecture'),
 (2, 'art'),
 (3, 'online' 'store'),

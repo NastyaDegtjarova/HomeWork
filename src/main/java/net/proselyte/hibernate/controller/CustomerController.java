@@ -1,9 +1,13 @@
 package net.proselyte.hibernate.controller;
 
 import net.proselyte.hibernate.dao.CustomerDAO;
+import net.proselyte.hibernate.dao.DeveloperDAO;
+import net.proselyte.hibernate.dao.ProjectDAO;
 import net.proselyte.hibernate.model.Customer;
+import net.proselyte.hibernate.model.Project;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -11,10 +15,12 @@ import java.util.Scanner;
  */
 public class CustomerController {
     private CustomerDAO customerDAO;
+    private ProjectDAO projectDAO;
     private Scanner scan;
 
-    public CustomerController(CustomerDAO customerDAO) {
+    public CustomerController(CustomerDAO customerDAO, ProjectDAO projectDAO) {
         this.customerDAO = customerDAO;
+        this.projectDAO = projectDAO;
         scan = new Scanner(System.in);
     }
 
@@ -24,6 +30,7 @@ public class CustomerController {
             System.out.println("2 - View customer");
             System.out.println("3 - Update customer");
             System.out.println("4 - Delete customer");
+            System.out.println("5 - View all customer");
             System.out.println("0 - Previous menu");
 
             int choise = 0;
@@ -37,6 +44,8 @@ public class CustomerController {
                     changeCustomer();
                 } else if (choise == 4) {
                     deleteCustomer();
+                } else if (choise == 5) {
+                    showAllCustom();
                 } else if (choise == 0) {
                     break;
                 }  else {
@@ -52,7 +61,31 @@ public class CustomerController {
         long customId = scan.nextLong();
         try {
             Customer customer = customerDAO.getById(customId);
+            setDeps(customer);
             System.out.println(customer);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAllCustom() {
+        try {
+            List<Customer> customers = customerDAO.getAll();
+            for(int i = 0; i < customers.size(); i++){
+                Customer customer = customers.get(i);
+                setDeps(customer);
+                System.out.println(customer);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setDeps(Customer customer) {
+        try {
+            List<Project> projects = projectDAO.getByCustId(customer.getIdCustomer());
+            customer.setProjects(projects);
         } catch (SQLException e) {
             e.printStackTrace();
         }

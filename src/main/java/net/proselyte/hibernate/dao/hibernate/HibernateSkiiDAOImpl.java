@@ -59,4 +59,9 @@ public class HibernateSkiiDAOImpl implements SkillDAO {
         session.close();
         return result;
     }
+
+    @Override
+    public List<Skill> getByDevId(Long id) {
+        return null;
+    }
 }

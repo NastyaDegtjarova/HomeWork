@@ -59,4 +59,19 @@ public class HibernateProjectDAOImpl implements ProjectDAO {
         session.close();
         return result;
     }
+
+    @Override
+    public List<Project> getByDevId(Long id) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public List<Project> getByCustId(Long id) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public List<Project> getByCompId(Long id) throws SQLException {
+        return null;
+    }
 }

@@ -59,4 +59,9 @@ public class HibernateCustomerDAOImpl implements CustomerDAO {
         session.close();
         return result;
 }
+
+    @Override
+    public List<Customer> getByProjId(Long projId) throws SQLException {
+        return null;
+    }
 }

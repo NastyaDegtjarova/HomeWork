@@ -3,12 +3,10 @@ package net.proselyte.hibernate.dao.jdbc;
 
 import net.proselyte.hibernate.dao.ConnectionUtil;
 import net.proselyte.hibernate.dao.SkillDAO;
+import net.proselyte.hibernate.dao.TableNames;
 import net.proselyte.hibernate.model.Skill;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,52 +19,57 @@ public class JdbcSkillDAOImpl implements SkillDAO {
 
     @Override
     public Skill getById(Long id) throws SQLException {
-        String sql = "SELECT * FROM skill WHERE id_skills = " + id;
-        Statement statement = ConnectionUtil.getConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
-
-
+        String sql = "SELECT * FROM "+ TableNames.skill+" WHERE "+SkillColumnNames.id_skills+" = ?";
+        Connection connection = ConnectionUtil.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setLong(1, id);
+        ResultSet resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
             Skill skill = new Skill();
-            Long skillId = resultSet.getLong("id_skills");
-            String specialty = resultSet.getString("specialty");
+            Long skillId = resultSet.getLong(SkillColumnNames.id_skills.name());
+            String specialty = resultSet.getString(SkillColumnNames.specialty.name());
 
-            skill.withId_skill(skillId)
+            skill.withIdSkill(skillId)
                     .withSpecialty(specialty);
             return skill;
         }else {
             System.out.println("No skill with this ID!!!");
         }
-
+        resultSet.close();
+        statement.close();
+        connection.close();
         return null;
     }
 
     @Override
     public List<Skill> getAll() throws SQLException {
         List<Skill> skills = new ArrayList<>();
-        String sql = "SELECT * FROM skill";
-        Statement statement = ConnectionUtil.getConnection().createStatement();
+        String sql = "SELECT * FROM "+TableNames.skill+"";
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
         while (resultSet.next()) {
             Skill skill = new Skill();
-            Long skillId = resultSet.getLong("id_skills");
-            String specialty = resultSet.getString("specialty");
+            Long skillId = resultSet.getLong(SkillColumnNames.id_skills.name());
+            String specialty = resultSet.getString(SkillColumnNames.specialty.name());
 
-            skill.withId_skill(skillId)
+            skill.withIdSkill(skillId)
                     .withSpecialty(specialty);
 
             skills.add(skill);
         }
-
+        resultSet.close();
+        statement.close();
+        connection.close();
         return skills;
     }
 
     @Override
     public void save(Skill skill) throws SQLException {
-        String sql = "INSERT INTO skill (id_skills, specialty) VALUES " +
-                "("+skill.getId_skill()+ ",'" + skill.getSpecialty()+"')";
+        String sql = "INSERT INTO "+TableNames.skill+" ("+SkillColumnNames.id_skills+", "+SkillColumnNames.specialty+") VALUES " +
+                "("+skill.getIdSkill()+ ",'" + skill.getSpecialty()+"')";
         System.out.println(sql);
         Connection connection = ConnectionUtil.getConnection();
         Statement statement = connection.createStatement();
@@ -77,8 +80,8 @@ public class JdbcSkillDAOImpl implements SkillDAO {
 
     @Override
     public void update(Skill skill) throws SQLException {
-        String sql = "UPDATE skill SET id_skills = "+skill.getId_skill()+", specialty='"+skill.getSpecialty()
-                +"' WHERE id_skills = " + skill.getId_skill();
+        String sql = "UPDATE "+TableNames.skill+" SET "+SkillColumnNames.id_skills+" = "+skill.getIdSkill()+", "+SkillColumnNames.specialty+"='"+skill.getSpecialty()
+                +"' WHERE "+SkillColumnNames.id_skills+" = " + skill.getIdSkill();
         System.out.println(sql);
         Connection connection = ConnectionUtil.getConnection();
         Statement statement = connection.createStatement();
@@ -89,13 +92,37 @@ public class JdbcSkillDAOImpl implements SkillDAO {
 
     @Override
     public void delete(Skill skill) throws SQLException {
-        String sqlDelDevRefSkill = "DELETE FROM developer_skill WHERE id_skill = " + skill.getId_skill();
-        String sqlDelDev = "DELETE FROM skill WHERE id_skills = " + skill.getId_skill();
+        String sqlDelDevRefSkill = "DELETE FROM "+TableNames.developer_skill+" WHERE "+DeveloperSkillColumnName.id_skill+" = " + skill.getIdSkill();
+        String sqlDelDev = "DELETE FROM "+TableNames.skill+" WHERE "+SkillColumnNames.id_skills+" = " + skill.getIdSkill();
         Connection connection = ConnectionUtil.getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate(sqlDelDevRefSkill);
         statement.executeUpdate(sqlDelDev);
         statement.close();
         connection.close();
+    }
+
+    @Override
+    public List<Skill> getByDevId(Long id) throws SQLException {
+        List<Skill> skills = new ArrayList<>();
+        String sql = "SELECT * FROM "+TableNames.skill+" ";
+        Connection connection = ConnectionUtil.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        while (resultSet.next()) {
+            Skill skill = new Skill();
+            Long skillId = resultSet.getLong(SkillColumnNames.id_skills.name());
+            String specialty = resultSet.getString(SkillColumnNames.specialty.name());
+
+            skill.withIdSkill(skillId)
+                    .withSpecialty(specialty);
+
+            skills.add(skill);
+        }
+        resultSet.close();
+        statement.close();
+        connection.close();
+        return skills;
     }
 }

@@ -3,9 +3,12 @@ package net.proselyte.hibernate.controller;
 
 
 import net.proselyte.hibernate.dao.CompanieDAO;
+import net.proselyte.hibernate.dao.ProjectDAO;
 import net.proselyte.hibernate.model.Companie;
+import net.proselyte.hibernate.model.Project;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -13,10 +16,12 @@ import java.util.Scanner;
  */
 public class CompanyController {
     private CompanieDAO companieDAO;
+    private ProjectDAO projectDAO;
     private Scanner scan;
 
-    public CompanyController(CompanieDAO companieDAO) {
+    public CompanyController(CompanieDAO companieDAO, ProjectDAO projectDAO) {
         this.companieDAO = companieDAO;
+        this.projectDAO = projectDAO;
         scan = new Scanner(System.in);
     }
 
@@ -26,6 +31,7 @@ public class CompanyController {
             System.out.println("2 - View companie");
             System.out.println("3 - Update companie");
             System.out.println("4 - Delete companie");
+            System.out.println("5 - View all companie");
             System.out.println("0 - Previous companie");
 
             int choise = 0;
@@ -39,6 +45,8 @@ public class CompanyController {
                     changeCompanie();
                 } else if (choise == 4) {
                     deleteCompanie();
+                } else if (choise == 5) {
+                    showAllComp();
                 } else if (choise == 0) {
                     break;
                 }  else {
@@ -54,7 +62,30 @@ public class CompanyController {
         long companieId = scan.nextLong();
         try {
             Companie companie = companieDAO.getById(companieId);
+            setDeps(companie);
             System.out.println(companie);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAllComp() {
+        try {
+            List<Companie> companies = companieDAO.getAll();
+            for(int i = 0; i < companies.size(); i++){
+                Companie companie = companies.get(i);
+                setDeps(companie);
+                System.out.println(companie);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setDeps(Companie companie) {
+        try {
+            List<Project> projects = projectDAO.getByCompId(companie.getIdComp());
+            companie.setProjects(projects);
         } catch (SQLException e) {
             e.printStackTrace();
         }

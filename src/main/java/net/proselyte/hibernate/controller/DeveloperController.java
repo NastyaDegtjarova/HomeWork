@@ -1,7 +1,11 @@
 package net.proselyte.hibernate.controller;
 
 import net.proselyte.hibernate.dao.DeveloperDAO;
+import net.proselyte.hibernate.dao.ProjectDAO;
+import net.proselyte.hibernate.dao.SkillDAO;
 import net.proselyte.hibernate.model.Developer;
+import net.proselyte.hibernate.model.Project;
+import net.proselyte.hibernate.model.Skill;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -13,10 +17,17 @@ import java.util.Scanner;
  */
 public class DeveloperController {
     private DeveloperDAO developerDAO;
+    private ProjectDAO projectDAO;
+    private SkillDAO skillDAO;
     private Scanner scan;
 
-    public DeveloperController(DeveloperDAO developerDAO) {
+    public DeveloperController() {
+    }
+
+    public DeveloperController(DeveloperDAO developerDAO, ProjectDAO projectDAO, SkillDAO skillDAO) {
         this.developerDAO = developerDAO;
+        this.projectDAO = projectDAO;
+        this.skillDAO = skillDAO;
         scan = new Scanner(System.in);
     }
 
@@ -56,10 +67,23 @@ public class DeveloperController {
         long devId = scan.nextLong();
         try {
             Developer developer = developerDAO.getById(devId);
+            setDeps(developer);
             System.out.println(developer);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setDeps(Developer developer) {
+        try {
+            List<Project> projects = projectDAO.getByDevId(developer.getId());
+            developer.setProjects(projects);
+            List<Skill> skills = skillDAO.getByDevId(developer.getId());
+            developer.setSkills(skills);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void deleteDeveloper() {
@@ -93,7 +117,9 @@ public class DeveloperController {
         try {
             List<Developer> developers = developerDAO.getAll();
             for(int i = 0; i < developers.size(); i++){
-                System.out.println(developers.get(i));
+                Developer developer = developers.get(i);
+                setDeps(developer);
+                System.out.println(developer);
             }
 
         } catch (SQLException e) {

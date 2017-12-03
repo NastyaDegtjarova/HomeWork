@@ -60,4 +60,8 @@ public class HibernateCompanyDAOImpl implements CompanieDAO {
         return result;
     }
 
+    @Override
+    public List<Companie> getByProjId(Long projId) throws SQLException {
+        return null;
+    }
 }
