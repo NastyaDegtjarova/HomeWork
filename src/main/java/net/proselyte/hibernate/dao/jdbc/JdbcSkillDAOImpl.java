@@ -3,7 +3,9 @@ package net.proselyte.hibernate.dao.jdbc;
 
 import net.proselyte.hibernate.dao.ConnectionUtil;
 import net.proselyte.hibernate.dao.SkillDAO;
-import net.proselyte.hibernate.dao.TableNames;
+import net.proselyte.hibernate.dao.constants.TableNames;
+import net.proselyte.hibernate.dao.constants.DeveloperSkillColumnName;
+import net.proselyte.hibernate.dao.constants.SkillColumnNames;
 import net.proselyte.hibernate.model.Skill;
 
 import java.sql.*;
@@ -15,11 +17,18 @@ import java.util.List;
  */
 public class JdbcSkillDAOImpl implements SkillDAO {
     private Statement statement;
+    private static JdbcSkillDAOImpl instance = new JdbcSkillDAOImpl();
 
+    private JdbcSkillDAOImpl() {
+    }
+
+    public static SkillDAO getInstance() {
+        return instance;
+    }
 
     @Override
     public Skill getById(Long id) throws SQLException {
-        String sql = "SELECT * FROM "+ TableNames.skill+" WHERE "+SkillColumnNames.id_skills+" = ?";
+        String sql = "SELECT * FROM "+ TableNames.skill+" WHERE "+ SkillColumnNames.id_skills+" = ?";
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setLong(1, id);
@@ -92,7 +101,7 @@ public class JdbcSkillDAOImpl implements SkillDAO {
 
     @Override
     public void delete(Skill skill) throws SQLException {
-        String sqlDelDevRefSkill = "DELETE FROM "+TableNames.developer_skill+" WHERE "+DeveloperSkillColumnName.id_skill+" = " + skill.getIdSkill();
+        String sqlDelDevRefSkill = "DELETE FROM "+TableNames.developer_skill+" WHERE "+ DeveloperSkillColumnName.id_skill+" = " + skill.getIdSkill();
         String sqlDelDev = "DELETE FROM "+TableNames.skill+" WHERE "+SkillColumnNames.id_skills+" = " + skill.getIdSkill();
         Connection connection = ConnectionUtil.getConnection();
         Statement statement = connection.createStatement();

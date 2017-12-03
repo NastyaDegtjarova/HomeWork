@@ -11,30 +11,30 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         DeveloperController developerController = new DeveloperController(
-                new JdbcDeveloperDAOImpl(),
-                new JdbcProjectDAOImpl(),
-                new JdbcSkillDAOImpl());
+                JdbcDeveloperDAOImpl.getInstance(),
+               JdbcProjectDAOImpl.getInstance(),
+                JdbcSkillDAOImpl.getInstance());
 /*        DeveloperController developerController = new DeveloperController(
                 new HibernateDeveloperDAOImpl(),
                 new HibernateProjectDAOImpl(),
                 new HibernateSkiiDAOImpl());*/
         SkillController skillController = new SkillController(
-                new JdbcSkillDAOImpl(),
-                new JdbcDeveloperDAOImpl()
+                JdbcSkillDAOImpl.getInstance(),
+                JdbcDeveloperDAOImpl.getInstance()
         );
         ProjectController projectController = new ProjectController(
-                new JdbcProjectDAOImpl(),
-                new JdbcDeveloperDAOImpl(),
-                new JdbcCustomerDAOImpl(),
-                new JdbcCompanieDAOImpl()
+                JdbcProjectDAOImpl.getInstance(),
+                JdbcDeveloperDAOImpl.getInstance(),
+                JdbcCustomerDAOImpl.getInstance(),
+                JdbcCompanieDAOImpl.getInstance()
         );
         CustomerController customerController = new CustomerController(
-                new JdbcCustomerDAOImpl(),
-                new JdbcProjectDAOImpl()
+                JdbcCustomerDAOImpl.getInstance(),
+                JdbcProjectDAOImpl.getInstance()
         );
         CompanyController companyController = new CompanyController(
-                new JdbcCompanieDAOImpl(),
-                new JdbcProjectDAOImpl()
+                JdbcCompanieDAOImpl.getInstance(),
+                JdbcProjectDAOImpl.getInstance()
         );
 
         while (true) {

@@ -3,7 +3,11 @@ package net.proselyte.hibernate.dao.jdbc;
 
 import net.proselyte.hibernate.dao.ConnectionUtil;
 import net.proselyte.hibernate.dao.ProjectDAO;
-import net.proselyte.hibernate.dao.TableNames;
+import net.proselyte.hibernate.dao.constants.TableNames;
+import net.proselyte.hibernate.dao.constants.CompaniProjectColumnName;
+import net.proselyte.hibernate.dao.constants.CustomerProjectColumnName;
+import net.proselyte.hibernate.dao.constants.ProjectColumnName;
+import net.proselyte.hibernate.dao.constants.ProjectDeveloperColumnName;
 import net.proselyte.hibernate.model.Project;
 
 
@@ -16,11 +20,18 @@ import java.util.List;
  */
 public class JdbcProjectDAOImpl implements ProjectDAO {
     private Statement statement;
+    private static JdbcProjectDAOImpl instance = new JdbcProjectDAOImpl();
 
+    private JdbcProjectDAOImpl() {
+    }
+
+    public static ProjectDAO getInstance() {
+        return instance;
+    }
 
     @Override
     public Project getById(Long id) throws SQLException {
-        String sql = "SELECT * FROM "+ TableNames.project+" WHERE "+ProjectColumnName.id_projects+" = ?";
+        String sql = "SELECT * FROM "+ TableNames.project+" WHERE "+ ProjectColumnName.id_projects+" = ?";
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setLong(1, id);
@@ -52,7 +63,7 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
         List<Project> projects = new ArrayList<>();
         String sql = "SELECT "+ProjectColumnName.id_projects+", "+ProjectColumnName.name_projects+", "+ProjectColumnName.cost
                 +" FROM "+TableNames.project+" p, "+TableNames.project_developer+" pd WHERE p."+ProjectColumnName.id_projects
-                +" = pd."+ProjectDeveloperColumnName.id_project+" AND pd."+ProjectDeveloperColumnName.id_developer+" = ?";
+                +" = pd."+ ProjectDeveloperColumnName.id_project+" AND pd."+ProjectDeveloperColumnName.id_developer+" = ?";
 
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -82,7 +93,7 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
         List<Project> projects = new ArrayList<>();
         String sql = "SELECT "+ProjectColumnName.id_projects+", "+ProjectColumnName.name_projects+", "+ProjectColumnName.cost
                 +" FROM "+TableNames.project+" p, "+TableNames.customer_project+" cp WHERE p."+ProjectColumnName.id_projects
-                +" = cp."+CustomerProjectColumnName.id_project+" AND cp."+CustomerProjectColumnName.id_customer+" = ?";
+                +" = cp."+ CustomerProjectColumnName.id_project+" AND cp."+CustomerProjectColumnName.id_customer+" = ?";
 
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -112,7 +123,7 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
         List<Project> projects = new ArrayList<>();
         String sql = "SELECT "+ProjectColumnName.id_projects+", "+ProjectColumnName.name_projects+", "+ProjectColumnName.cost
                 +" FROM "+TableNames.project+" p, "+TableNames.compani_project+" cp WHERE p."+ProjectColumnName.id_projects
-                +" = cp."+CompaniProjectColumnName.id_project+" AND cp."+CompaniProjectColumnName.id_compani+" = ?";
+                +" = cp."+ CompaniProjectColumnName.id_project+" AND cp."+CompaniProjectColumnName.id_compani+" = ?";
 
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);

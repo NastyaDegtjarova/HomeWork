@@ -2,7 +2,11 @@ package net.proselyte.hibernate.dao.jdbc;
 
 import net.proselyte.hibernate.dao.ConnectionUtil;
 import net.proselyte.hibernate.dao.DeveloperDAO;
-import net.proselyte.hibernate.dao.TableNames;
+import net.proselyte.hibernate.dao.constants.TableNames;
+import net.proselyte.hibernate.dao.constants.DeveloperColumnNames;
+import net.proselyte.hibernate.dao.constants.DeveloperSkillColumnName;
+import net.proselyte.hibernate.dao.constants.ProjectDeveloperColumnName;
+import net.proselyte.hibernate.dao.constants.SkillColumnNames;
 import net.proselyte.hibernate.model.Developer;
 
 import java.math.BigDecimal;
@@ -14,9 +18,18 @@ import java.util.List;
  * Created by Nastya on 19.11.2017.
  */
 public class JdbcDeveloperDAOImpl implements DeveloperDAO {
+    private static JdbcDeveloperDAOImpl instance = new JdbcDeveloperDAOImpl();
+
+    private JdbcDeveloperDAOImpl() {
+    }
+
+    public static DeveloperDAO getInstance() {
+        return instance;
+    }
+
     @Override
     public Developer getById(Long id) throws SQLException {
-        String sql = "SELECT * FROM "+ TableNames.developer+" WHERE "+DeveloperColumnNames.id_developer+" = ?";
+        String sql = "SELECT * FROM "+ TableNames.developer+" WHERE "+ DeveloperColumnNames.id_developer+" = ?";
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setLong(1, id);
@@ -79,7 +92,7 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
         String sql = "SELECT d."+DeveloperColumnNames.id_developer+", "+DeveloperColumnNames.first_name+", "+
                 DeveloperColumnNames.last_name+", "+DeveloperColumnNames.salary+" FROM "+TableNames.developer
                 +" d, "+TableNames.project_developer+" pd WHERE d."+DeveloperColumnNames.id_developer+" = pd."
-                +ProjectDeveloperColumnName.id_developer+" AND pd."+ProjectDeveloperColumnName.id_project+" = ?";
+                + ProjectDeveloperColumnName.id_developer+" AND pd."+ProjectDeveloperColumnName.id_project+" = ?";
             System.out.println(sql);
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -110,7 +123,7 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
     @Override
     public List<Developer> getBySkillId(Long skillId) throws SQLException {
         List<Developer> developers = new ArrayList<>();
-        String sql = "SELECT s."+SkillColumnNames.id_skills+", "+SkillColumnNames.specialty+" FROM "+TableNames.skill
+        String sql = "SELECT s."+ SkillColumnNames.id_skills+", "+SkillColumnNames.specialty+" FROM "+TableNames.skill
                 +" s, "+TableNames.developer_skill+" ds WHERE s."+SkillColumnNames.id_skills+" = ds."+
                 DeveloperSkillColumnName.id_skill+" AND ds."+DeveloperSkillColumnName.id_developer+" = ?";
             System.out.println(sql);

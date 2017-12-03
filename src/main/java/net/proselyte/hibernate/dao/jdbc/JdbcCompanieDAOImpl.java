@@ -2,9 +2,10 @@ package net.proselyte.hibernate.dao.jdbc;
 
 
 import net.proselyte.hibernate.dao.CompanieDAO;
-import net.proselyte.hibernate.dao.CompanyColumnNames;
+import net.proselyte.hibernate.dao.constants.CompanyColumnNames;
 import net.proselyte.hibernate.dao.ConnectionUtil;
-import net.proselyte.hibernate.dao.TableNames;
+import net.proselyte.hibernate.dao.constants.TableNames;
+import net.proselyte.hibernate.dao.constants.CompaniProjectColumnName;
 import net.proselyte.hibernate.model.Companie;
 
 import java.sql.*;
@@ -17,6 +18,14 @@ import java.util.List;
 public class JdbcCompanieDAOImpl implements CompanieDAO {
     private Statement statement;
 
+    private static JdbcCompanieDAOImpl instance = new JdbcCompanieDAOImpl();
+
+    private JdbcCompanieDAOImpl() {
+    }
+
+    public static CompanieDAO getInstance() {
+        return instance;
+    }
 
     @Override
     public Companie getById(Long id) throws SQLException {
@@ -77,7 +86,7 @@ public class JdbcCompanieDAOImpl implements CompanieDAO {
         List<Companie> companies = new ArrayList<>();
         String sql = "SELECT c."+CompanyColumnNames.id_companies+", "+CompanyColumnNames.name_companies
                 +" FROM "+TableNames.companie+" c, "+TableNames.compani_project+" cp WHERE c."+CompanyColumnNames.id_companies
-                +" = cp."+CompaniProjectColumnName.id_compani+" AND cp."+CompaniProjectColumnName.id_project+" = ?";
+                +" = cp."+ CompaniProjectColumnName.id_compani+" AND cp."+CompaniProjectColumnName.id_project+" = ?";
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setLong(1, projId);
