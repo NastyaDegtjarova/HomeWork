@@ -1,43 +1,15 @@
 package net.proselyte.hibernate.model;
 
-import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Entity
-
-@Table(name = "project")
 public class Project {
-    @Id
-    @Column(name = "id_projects")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
-
-    @Column(name = "name_projects")
     private String name;
-
-    @Column(name = "cost")
     private int cost;
-
-    @ManyToMany
-    @JoinTable(name = "project_developer",
-            joinColumns = { @JoinColumn(name = "id_project") },
-            inverseJoinColumns = { @JoinColumn(name = "id_developer") }
-    )
     private List<Developer> developers;
-
-    @ManyToMany
-    @JoinTable(name = "customer_project",
-            joinColumns = { @JoinColumn(name = "id_project") },
-            inverseJoinColumns = { @JoinColumn(name = "id_customer") }
-    )
     private List<Customer> customers;
-
-    @ManyToMany
-    @JoinTable(name = "compani_project",
-            joinColumns = { @JoinColumn(name = "id_project") },
-            inverseJoinColumns = { @JoinColumn(name = "id_compani") }
-    )
     private List<Companie> companies;
 
     public Project() {

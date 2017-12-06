@@ -1,40 +1,16 @@
 package net.proselyte.hibernate.model;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Entity
-@Table(name = "developer")
 public class Developer {
 
-    @Id
-    @Column(name = "id_developer")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "first_name")
     private String firstName;
-
-    @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "salary")
     private BigDecimal salary;
-
-    @ManyToMany
-    @JoinTable(name = "project_developer",
-            joinColumns = { @JoinColumn(name = "id_developer") },
-            inverseJoinColumns = { @JoinColumn(name = "id_project") }
-    )
     private List<Project> projects;
-
-    @ManyToMany
-    @JoinTable(name = "developer_skill",
-            joinColumns = { @JoinColumn(name = "id_developer") },
-            inverseJoinColumns = { @JoinColumn(name = "id_skill") }
-    )
     private List<Skill> skills;
 
     public Developer() {

@@ -1,28 +1,16 @@
 package net.proselyte.hibernate.model;
 
-import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Created by Nastya on 20.11.2017.
  */
-@Entity
-@Table(name = "companie")
+
 public class Companie {
-    @Id
-    @Column(name = "idCompanies")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long idComp;
-
-    @Column(name = "nameCompanies")
     private String nameComp;
-
-    @ManyToMany
-    @JoinTable(name = "compani_project",
-            joinColumns = { @JoinColumn(name = "id_companie") },
-            inverseJoinColumns = { @JoinColumn(name = "id_project") }
-    )
     private List<Project> projects;
 
     public Companie() {
