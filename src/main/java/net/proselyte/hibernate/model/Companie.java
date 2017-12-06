@@ -19,6 +19,10 @@ public class Companie {
     private String nameComp;
 
     @ManyToMany
+    @JoinTable(name = "compani_project",
+            joinColumns = { @JoinColumn(name = "id_companie") },
+            inverseJoinColumns = { @JoinColumn(name = "id_project") }
+    )
     private List<Project> projects;
 
     public Companie() {

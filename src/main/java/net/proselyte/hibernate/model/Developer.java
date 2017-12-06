@@ -24,9 +24,17 @@ public class Developer {
     private BigDecimal salary;
 
     @ManyToMany
+    @JoinTable(name = "project_developer",
+            joinColumns = { @JoinColumn(name = "id_developer") },
+            inverseJoinColumns = { @JoinColumn(name = "id_project") }
+    )
     private List<Project> projects;
 
     @ManyToMany
+    @JoinTable(name = "developer_skill",
+            joinColumns = { @JoinColumn(name = "id_developer") },
+            inverseJoinColumns = { @JoinColumn(name = "id_skill") }
+    )
     private List<Skill> skills;
 
     public Developer() {

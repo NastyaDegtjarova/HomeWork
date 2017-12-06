@@ -20,6 +20,10 @@ public class Skill {
     private String specialty;
 
     @ManyToMany
+    @JoinTable(name = "developer_skill",
+            joinColumns = { @JoinColumn(name = "id_skill") },
+            inverseJoinColumns = { @JoinColumn(name = "id_developer") }
+    )
     private List<Developer> developers;
 
     public Skill() {

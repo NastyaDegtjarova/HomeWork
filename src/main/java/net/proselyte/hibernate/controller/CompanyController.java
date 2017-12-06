@@ -1,7 +1,5 @@
 package net.proselyte.hibernate.controller;
 
-
-
 import net.proselyte.hibernate.dao.CompanieDAO;
 import net.proselyte.hibernate.dao.ProjectDAO;
 import net.proselyte.hibernate.model.Companie;

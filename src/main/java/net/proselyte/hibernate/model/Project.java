@@ -20,12 +20,24 @@ public class Project {
     private int cost;
 
     @ManyToMany
+    @JoinTable(name = "project_developer",
+            joinColumns = { @JoinColumn(name = "id_project") },
+            inverseJoinColumns = { @JoinColumn(name = "id_developer") }
+    )
     private List<Developer> developers;
 
     @ManyToMany
+    @JoinTable(name = "customer_project",
+            joinColumns = { @JoinColumn(name = "id_project") },
+            inverseJoinColumns = { @JoinColumn(name = "id_customer") }
+    )
     private List<Customer> customers;
 
     @ManyToMany
+    @JoinTable(name = "compani_project",
+            joinColumns = { @JoinColumn(name = "id_project") },
+            inverseJoinColumns = { @JoinColumn(name = "id_compani") }
+    )
     private List<Companie> companies;
 
     public Project() {

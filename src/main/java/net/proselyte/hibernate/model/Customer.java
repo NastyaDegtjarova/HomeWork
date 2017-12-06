@@ -22,6 +22,10 @@ public class Customer {
     private String lastNameCust;
 
     @ManyToMany
+    @JoinTable(name = "customer_project",
+            joinColumns = { @JoinColumn(name = "id_customer") },
+            inverseJoinColumns = { @JoinColumn(name = "id_project") }
+    )
     private List<Project> projects;
 
     public Customer() {

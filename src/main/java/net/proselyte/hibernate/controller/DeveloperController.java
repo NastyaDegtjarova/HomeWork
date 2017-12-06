@@ -6,6 +6,7 @@ import net.proselyte.hibernate.dao.SkillDAO;
 import net.proselyte.hibernate.model.Developer;
 import net.proselyte.hibernate.model.Project;
 import net.proselyte.hibernate.model.Skill;
+import org.hibernate.Hibernate;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -15,11 +16,15 @@ import java.util.Scanner;
 /**
  * Created by Nastya on 19.11.2017.
  */
-public class DeveloperController {
+public class DeveloperController extends AbstractController {
+    private static final int CREATE_DEVELOPER = 1;
+//    private static final int CREATE_DEVELOPER = 1;
+//    private static final int CREATE_DEVELOPER = 1;
+//    private static final int CREATE_DEVELOPER = 1;
+//    private static final int CREATE_DEVELOPER = 1;
     private DeveloperDAO developerDAO;
     private ProjectDAO projectDAO;
     private SkillDAO skillDAO;
-    private Scanner scan;
 
     public DeveloperController() {
     }
@@ -28,7 +33,6 @@ public class DeveloperController {
         this.developerDAO = developerDAO;
         this.projectDAO = projectDAO;
         this.skillDAO = skillDAO;
-        scan = new Scanner(System.in);
     }
 
     public void menu() {
@@ -41,9 +45,18 @@ public class DeveloperController {
             System.out.println("0 - Previous menu");
 
 
-            if (scan.hasNextInt()) {
-                int choise = scan.nextInt();
-                if (choise == 1) {
+            if (getScan().hasNextInt()) {
+                int choise = getScan().nextInt();
+                switch (choise) {
+                    case CREATE_DEVELOPER:
+                        createNewDeveloper();
+                        break;
+                    case 2:
+                        showAllDevlopers();
+                        break;
+                    //
+                }
+                if (choise == CREATE_DEVELOPER) {
                     createNewDeveloper();
                 } else if (choise == 2) {
                     showAllDevlopers();
@@ -64,10 +77,11 @@ public class DeveloperController {
 
     private void showDevById() {
         System.out.println("Input developer id");
-        long devId = scan.nextLong();
+        long devId = getScan().nextLong();
         try {
             Developer developer = developerDAO.getById(devId);
-            setDeps(developer);
+            Hibernate.initialize(developer.getProjects());
+            Hibernate.initialize(developer.getSkills());
             System.out.println(developer);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,7 +102,7 @@ public class DeveloperController {
 
     private void deleteDeveloper() {
         System.out.println("Input developer id");
-        long devId = scan.nextLong();
+        long devId = getScan().nextLong();
         try {
             developerDAO.delete(new Developer(devId));
         } catch (SQLException e) {
@@ -98,14 +112,14 @@ public class DeveloperController {
 
     private void changeDeveloper() {
         System.out.println("Input developer id");
-        long devId = scan.nextLong();
+        long devId = getScan().nextLong();
         System.out.println("Input developer first_name");
-        scan.nextLine();
-        String devFirstName = scan.nextLine();
+        getScan().nextLine();
+        String devFirstName = getScan().nextLine();
         System.out.println("Input developer last_name");
-        String devLastName = scan.nextLine();
+        String devLastName = getScan().nextLine();
         System.out.println("Input developer salary");
-        long devSalary = scan.nextLong();
+        long devSalary = getScan().nextLong();
         try {
             developerDAO.update(new Developer(devId, devFirstName, devLastName, new BigDecimal(devSalary)));
         } catch (SQLException e) {
@@ -118,7 +132,8 @@ public class DeveloperController {
             List<Developer> developers = developerDAO.getAll();
             for(int i = 0; i < developers.size(); i++){
                 Developer developer = developers.get(i);
-                setDeps(developer);
+
+//                setDeps(developer);
                 System.out.println(developer);
             }
 
@@ -129,14 +144,14 @@ public class DeveloperController {
 
     private void createNewDeveloper() {
         System.out.println("Input developer id");
-        long devId = scan.nextLong();
+        long devId = getScan().nextLong();
         System.out.println("Input developer first_name");
-        scan.nextLine();
-        String devFirstName = scan.nextLine();
+        getScan().nextLine();
+        String devFirstName = getScan().nextLine();
         System.out.println("Input developer last_name");
-        String devLastName = scan.nextLine();
+        String devLastName = getScan().nextLine();
         System.out.println("Input developer salary");
-        long devSalary = scan.nextLong();
+        long devSalary = getScan().nextLong();
         try {
             developerDAO.save(new Developer(devId, devFirstName, devLastName, new BigDecimal(devSalary)));
         } catch (SQLException e) {

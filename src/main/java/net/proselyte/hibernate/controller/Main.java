@@ -1,6 +1,5 @@
 package net.proselyte.hibernate.controller;
 
-
 import net.proselyte.hibernate.dao.jdbc.*;
 
 import java.util.Scanner;
@@ -14,10 +13,6 @@ public class Main {
                 JdbcDeveloperDAOImpl.getInstance(),
                JdbcProjectDAOImpl.getInstance(),
                 JdbcSkillDAOImpl.getInstance());
-/*        DeveloperController developerController = new DeveloperController(
-                new HibernateDeveloperDAOImpl(),
-                new HibernateProjectDAOImpl(),
-                new HibernateSkiiDAOImpl());*/
         SkillController skillController = new SkillController(
                 JdbcSkillDAOImpl.getInstance(),
                 JdbcDeveloperDAOImpl.getInstance()
