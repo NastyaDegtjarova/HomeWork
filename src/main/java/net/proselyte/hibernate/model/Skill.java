@@ -66,7 +66,7 @@ public class Skill {
                 developers == null
                         ? "[]"
                         :developers.stream().map(Developer::getLastName).collect(Collectors.toList())) + '\'' +
-                ", specialty ='" + specialty + '\'' +
+                ", SPECIALTY ='" + specialty + '\'' +
 
                 '}';
     }

@@ -12,7 +12,13 @@ import java.util.Scanner;
 /**
  * Created by Nastya on 20.11.2017.
  */
-public class CompanyController {
+public class CompanyController extends AbstractController{
+    private static final int CREATE_COMPANY = 1;
+    private static final int VIEW_ALL_COMPANY = 2;
+    private static final int UPDATE_COMPANY = 3;
+    private static final int DELETE_COMPANY = 4;
+    private static final int VIEW_ID_COMPANY = 5;
+    private static final int PREVIOUS_MENU = 0;
     private CompanieDAO companieDAO;
     private ProjectDAO projectDAO;
     private Scanner scan;
@@ -25,38 +31,44 @@ public class CompanyController {
 
     public void menu() {
         while(true) {
-            System.out.println("1 - Create new companie");
-            System.out.println("2 - View companie");
-            System.out.println("3 - Update companie");
-            System.out.println("4 - Delete companie");
-            System.out.println("5 - View all companie");
-            System.out.println("0 - Previous companie");
+            System.out.println("1 - Create new company");
+            System.out.println("2 - View all company");
+            System.out.println("3 - Update company");
+            System.out.println("4 - Delete company");
+            System.out.println("5 - View company");
+            System.out.println("0 - Previous company");
 
-            int choise = 0;
-            if (scan.hasNextInt()) {
-                choise = scan.nextInt();
-                if (choise == 1) {
-                    createNewCompanie();
-                } else if (choise == 2) {
-                    showCompanById();
-                } else if (choise == 3) {
-                    changeCompanie();
-                } else if (choise == 4) {
-                    deleteCompanie();
-                } else if (choise == 5) {
-                    showAllComp();
-                } else if (choise == 0) {
-                    break;
-                }  else {
-                    System.out.println("Input incorrect");
+            if (getScan().hasNextInt()) {
+                int choise = getScan().nextInt();
+                switch (choise) {
+                    case CREATE_COMPANY:
+                        createNewCompanie();
+                        break;
+                    case VIEW_ALL_COMPANY:
+                        showAllComp();
+                        break;
+                    case UPDATE_COMPANY:
+                        changeCompanie();
+                        break;
+                    case DELETE_COMPANY:
+                        deleteCompanie();
+                        break;
+                    case VIEW_ID_COMPANY:
+                        showCompanById();
+                        break;
+                    case PREVIOUS_MENU:
+                        break;
+                    default:
+                        break;
                 }
             }
+
         }
 
     }
 
     private void showCompanById() {
-        System.out.println("Input customer id");
+        System.out.println("Input CUSTOMER id");
         long companieId = scan.nextLong();
         try {
             Companie companie = companieDAO.getById(companieId);
@@ -90,7 +102,7 @@ public class CompanyController {
     }
 
     private void deleteCompanie() {
-        System.out.println("Input companie id");
+        System.out.println("Input COMPANIE id");
         long comanieId = scan.nextLong();
         try {
             companieDAO.delete(new Companie(comanieId));
@@ -102,7 +114,7 @@ public class CompanyController {
     private void changeCompanie() {
         System.out.println("Input companies id");
         long compId = scan.nextLong();
-        System.out.println("Input name companie");
+        System.out.println("Input name COMPANIE");
         scan.nextLine();
         String name_companie = scan.nextLine();
         try {
@@ -115,7 +127,7 @@ public class CompanyController {
     private void createNewCompanie() {
         System.out.println("Input companies id");
         long compId = scan.nextLong();
-        System.out.println("Input name companie");
+        System.out.println("Input name COMPANIE");
         scan.nextLine();
         String name_companie = scan.nextLine();
         try {

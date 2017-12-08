@@ -17,7 +17,13 @@ import java.util.Scanner;
 /**
  * Created by Nastya on 20.11.2017.
  */
-public class ProjectController {
+public class ProjectController extends AbstractController{
+    private static final int CREATE_PROJECT = 1;
+    private static final int VIEW_ALL_PROJECT = 2;
+    private static final int UPDATE_PROJECT = 3;
+    private static final int DELETE_PROJECT = 4;
+    private static final int VIEW_ID_PROJECT = 5;
+    private static final int PREVIOUS_MENU = 0;
     private ProjectDAO projectDAO;
     private DeveloperDAO developerDAO;
     private CustomerDAO customerDAO;
@@ -36,31 +42,37 @@ public class ProjectController {
 
     public void menu() {
         while(true) {
-            System.out.println("1 - Create new project");
-            System.out.println("2 - View project");
-            System.out.println("3 - Update project");
-            System.out.println("4 - Delete project");
-            System.out.println("5 - View all project");
+            System.out.println("1 - Create new PROJECT");
+            System.out.println("2 - View all PROJECT");
+            System.out.println("3 - Update PROJECT");
+            System.out.println("4 - Delete PROJECT");
+            System.out.println("5 - View PROJECT");
             System.out.println("0 - Previous menu");
 
-            int choise = 0;
-            if (scan.hasNextInt()) {
-                choise = scan.nextInt();
-                if (choise == 1) {
-                    createNewProject();
-                } else if (choise == 2) {
-                    showProjById();
-                } else if (choise == 3) {
-                    changeProject();
-                } else if (choise == 4) {
-                    deleteProject();
-                } else if (choise == 5) {
-                    showAll();
-                } else if (choise == 0) {
-                    break;
-                }  else {
-                    System.out.println("Input incorrect");
+            if (getScan().hasNextInt()) {
+                int choise = getScan().nextInt();
+                switch (choise) {
+                    case CREATE_PROJECT:
+                        createNewProject();
+                        break;
+                    case VIEW_ALL_PROJECT:
+                        showAll();
+                        break;
+                    case UPDATE_PROJECT:
+                        changeProject();
+                        break;
+                    case DELETE_PROJECT:
+                        deleteProject();
+                        break;
+                    case VIEW_ID_PROJECT:
+                        showProjById();
+                        break;
+                    case PREVIOUS_MENU:
+                        break;
+                    default:
+                        break;
                 }
+
             }
         }
 
@@ -81,7 +93,7 @@ public class ProjectController {
     }
 
     private void showProjById() {
-        System.out.println("Input project id");
+        System.out.println("Input PROJECT id");
         long projId = scan.nextLong();
         try {
             Project project = projectDAO.getById(projId);
@@ -106,7 +118,7 @@ public class ProjectController {
     }
 
     private void deleteProject() {
-        System.out.println("Input project id");
+        System.out.println("Input PROJECT id");
         long projectId = scan.nextLong();
         try {
             projectDAO.delete(new Project(projectId));
@@ -117,12 +129,12 @@ public class ProjectController {
 
 
     private void changeProject() {
-        System.out.println("Input project id");
+        System.out.println("Input PROJECT id");
         long projectId = scan.nextLong();
         System.out.println("Input name_project");
         scan.nextLine();
         String projName = scan.nextLine();
-        System.out.println("Input project cost");
+        System.out.println("Input PROJECT COST");
         int projCost = scan.nextInt();
         try {
             projectDAO.update(new Project(projectId, projName, projCost));
@@ -132,12 +144,12 @@ public class ProjectController {
     }
 
     private void createNewProject() {
-        System.out.println("Input project id");
+        System.out.println("Input PROJECT id");
         long projectId = scan.nextLong();
-        System.out.println("Input project name");
+        System.out.println("Input PROJECT name");
         scan.nextLine();
         String projectName = scan.nextLine();
-        System.out.println("Input project cost");
+        System.out.println("Input PROJECT COST");
         int projCost = scan.nextInt();
         try {
             projectDAO.save(new Project(projectId, projectName, projCost));

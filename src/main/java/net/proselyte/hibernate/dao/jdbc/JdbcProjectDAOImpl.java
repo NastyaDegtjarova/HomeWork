@@ -31,50 +31,57 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
 
     @Override
     public Project getById(Long id) throws SQLException {
-        String sql = "SELECT * FROM "+ TableNames.project+" WHERE "+ ProjectColumnName.id_projects+" = ?";
-        Connection connection = ConnectionUtil.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        String sql = String.format("SELECT * FROM %s WHERE %s = ?", TableNames.PROJECT, ProjectColumnName.ID_PROJECTS );
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.prepareStatement(sql);
         statement.setLong(1, id);
-        ResultSet resultSet = statement.executeQuery();
-
-
+        resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
             Project project = new Project();
-            Long projId = resultSet.getLong(ProjectColumnName.id_projects.name());
-            String name_projects = resultSet.getString(ProjectColumnName.name_projects.name());
-            Integer cost = resultSet.getInt(ProjectColumnName.cost.name());
+            Long projId = resultSet.getLong(ProjectColumnName.ID_PROJECTS.name());
+            String name_projects = resultSet.getString(ProjectColumnName.NAME_PROJECTS.name());
+            Integer cost = resultSet.getInt(ProjectColumnName.COST.name());
 
             project.withIdProj(projId)
                     .withNameProj(name_projects)
                     .withCost(cost);
             return project;
         }else {
-                System.out.println("No project with this ID!!!");
+                System.out.println("No PROJECT with this ID!!!");
             }
-        resultSet.close();
-        statement.close();
-        connection.close();
+    } finally {
+        JdbcUtils.closeResources(connection, statement, resultSet);
+    }
         return null;
     }
 
     @Override
     public List<Project> getByDevId(Long devId) throws SQLException {
         List<Project> projects = new ArrayList<>();
-        String sql = "SELECT "+ProjectColumnName.id_projects+", "+ProjectColumnName.name_projects+", "+ProjectColumnName.cost
-                +" FROM "+TableNames.project+" p, "+TableNames.project_developer+" pd WHERE p."+ProjectColumnName.id_projects
-                +" = pd."+ ProjectDeveloperColumnName.id_project+" AND pd."+ProjectDeveloperColumnName.id_developer+" = ?";
+        String sql = "SELECT "+ProjectColumnName.ID_PROJECTS +", "+ProjectColumnName.NAME_PROJECTS +", "+ProjectColumnName.COST
+                +" FROM "+TableNames.PROJECT +" p, "+TableNames.PROJECT_DEVELOPER +" pd WHERE p."+ProjectColumnName.ID_PROJECTS
+                +" = pd."+ ProjectDeveloperColumnName.ID_PROJECT +" AND pd."+ProjectDeveloperColumnName.ID_DEVELOPER +" = ?";
 
-        Connection connection = ConnectionUtil.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.prepareStatement(sql);
         statement.setLong(1, devId);
-        ResultSet resultSet = statement.executeQuery();
+        resultSet = statement.executeQuery();
 
         while (resultSet.next()) {
             Project project = new Project();
-            Long projId = resultSet.getLong(ProjectColumnName.id_projects.name());
-            String name_projects = resultSet.getString(ProjectColumnName.name_projects.name());
-            Integer cost = resultSet.getInt(ProjectColumnName.cost.name());
+            Long projId = resultSet.getLong(ProjectColumnName.ID_PROJECTS.name());
+            String name_projects = resultSet.getString(ProjectColumnName.NAME_PROJECTS.name());
+            Integer cost = resultSet.getInt(ProjectColumnName.COST.name());
 
             project.withIdProj(projId)
                     .withNameProj(name_projects)
@@ -82,29 +89,33 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
 
             projects.add(project);
         }
-        resultSet.close();
-        statement.close();
-        connection.close();
-        return projects;
+    } finally {
+        JdbcUtils.closeResources(connection, statement, resultSet);
+        }
+        return null;
     }
 
     @Override
     public List<Project> getByCustId(Long custId) throws SQLException {
         List<Project> projects = new ArrayList<>();
-        String sql = "SELECT "+ProjectColumnName.id_projects+", "+ProjectColumnName.name_projects+", "+ProjectColumnName.cost
-                +" FROM "+TableNames.project+" p, "+TableNames.customer_project+" cp WHERE p."+ProjectColumnName.id_projects
-                +" = cp."+ CustomerProjectColumnName.id_project+" AND cp."+CustomerProjectColumnName.id_customer+" = ?";
+        String sql = "SELECT "+ProjectColumnName.ID_PROJECTS +", "+ProjectColumnName.NAME_PROJECTS +", "+ProjectColumnName.COST
+                +" FROM "+TableNames.PROJECT +" p, "+TableNames.CUSTOMER_PROJECT +" cp WHERE p."+ProjectColumnName.ID_PROJECTS
+                +" = cp."+ CustomerProjectColumnName.ID_PROJECT +" AND cp."+CustomerProjectColumnName.ID_CUSTOMER +" = ?";
 
-        Connection connection = ConnectionUtil.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.prepareStatement(sql);
         statement.setLong(1, custId);
-        ResultSet resultSet = statement.executeQuery();
+        resultSet = statement.executeQuery();
 
         while (resultSet.next()) {
             Project project = new Project();
-            Long projId = resultSet.getLong(ProjectColumnName.id_projects.name());
-            String name_projects = resultSet.getString(ProjectColumnName.name_projects.name());
-            Integer cost = resultSet.getInt(ProjectColumnName.cost.name());
+            Long projId = resultSet.getLong(ProjectColumnName.ID_PROJECTS.name());
+            String name_projects = resultSet.getString(ProjectColumnName.NAME_PROJECTS.name());
+            Integer cost = resultSet.getInt(ProjectColumnName.COST.name());
 
             project.withIdProj(projId)
                     .withNameProj(name_projects)
@@ -112,29 +123,33 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
 
             projects.add(project);
         }
-        resultSet.close();
-        statement.close();
-        connection.close();
-        return projects;
+        } finally {
+        JdbcUtils.closeResources(connection, statement, resultSet);
+        }
+        return null;
     }
 
     @Override
     public List<Project> getByCompId(Long compId) throws SQLException {
         List<Project> projects = new ArrayList<>();
-        String sql = "SELECT "+ProjectColumnName.id_projects+", "+ProjectColumnName.name_projects+", "+ProjectColumnName.cost
-                +" FROM "+TableNames.project+" p, "+TableNames.compani_project+" cp WHERE p."+ProjectColumnName.id_projects
-                +" = cp."+ CompaniProjectColumnName.id_project+" AND cp."+CompaniProjectColumnName.id_compani+" = ?";
+        String sql = "SELECT "+ProjectColumnName.ID_PROJECTS +", "+ProjectColumnName.NAME_PROJECTS +", "+ProjectColumnName.COST
+                +" FROM "+TableNames.PROJECT +" p, "+TableNames.COMPANI_PROJECT +" cp WHERE p."+ProjectColumnName.ID_PROJECTS
+                +" = cp."+ CompaniProjectColumnName.ID_PROJECT +" AND cp."+CompaniProjectColumnName.ID_COMPANI +" = ?";
 
-        Connection connection = ConnectionUtil.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.prepareStatement(sql);
         statement.setLong(1, compId);
-        ResultSet resultSet = statement.executeQuery();
+        resultSet = statement.executeQuery();
 
         while (resultSet.next()) {
             Project project = new Project();
-            Long projId = resultSet.getLong(ProjectColumnName.id_projects.name());
-            String name_projects = resultSet.getString(ProjectColumnName.name_projects.name());
-            Integer cost = resultSet.getInt(ProjectColumnName.cost.name());
+            Long projId = resultSet.getLong(ProjectColumnName.ID_PROJECTS.name());
+            String name_projects = resultSet.getString(ProjectColumnName.NAME_PROJECTS.name());
+            Integer cost = resultSet.getInt(ProjectColumnName.COST.name());
 
             project.withIdProj(projId)
                     .withNameProj(name_projects)
@@ -142,25 +157,30 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
 
             projects.add(project);
         }
-        resultSet.close();
-        statement.close();
-        connection.close();
-        return projects;
+        } finally {
+        JdbcUtils.closeResources(connection, statement, resultSet);
+        }
+        return null;
     }
 
     @Override
     public List<Project> getAll() throws SQLException {
         List<Project> projects = new ArrayList<>();
-        String sql = "SELECT * FROM "+TableNames.project+"";
-        Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
+        String sql = String.format( "SELECT * FROM %s ", TableNames.PROJECT );
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.createStatement();
+        resultSet = statement.executeQuery(sql);
 
         while (resultSet.next()) {
             Project project = new Project();
-            Long projId = resultSet.getLong(ProjectColumnName.id_projects.name());
-            String name_projects = resultSet.getString(ProjectColumnName.name_projects.name());
-            Integer cost = resultSet.getInt(ProjectColumnName.cost.name());
+            Long projId = resultSet.getLong(ProjectColumnName.ID_PROJECTS.name());
+            String name_projects = resultSet.getString(ProjectColumnName.NAME_PROJECTS.name());
+            Integer cost = resultSet.getInt(ProjectColumnName.COST.name());
 
             project.withIdProj(projId)
                     .withNameProj(name_projects)
@@ -168,49 +188,65 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
 
             projects.add(project);
         }
-        resultSet.close();
-        statement.close();
-        connection.close();
-        return projects;
+        } finally {
+        JdbcUtils.closeResources(connection, statement, resultSet);
+        }
+        return null;
     }
 
     @Override
     public void save(Project project) throws SQLException {
-        String sql = "INSERT INTO "+TableNames.project+" ("+ProjectColumnName.id_projects+", "+ProjectColumnName.name_projects+", "+ProjectColumnName.cost+") VALUES " +
+        String sql = "INSERT INTO "+TableNames.PROJECT +" ("+ProjectColumnName.ID_PROJECTS +", "+ProjectColumnName.NAME_PROJECTS +", "+ProjectColumnName.COST +") VALUES " +
                 "("+project.getId()+ ",'" + project.getName()+"',"+project.getCost()+")";
         System.out.println(sql);
-        Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
+
+        Connection connection = null;
+        Statement statement = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.createStatement();
         statement.executeUpdate(sql);
-        statement.close();
-        connection.close();
+        } finally {
+        JdbcUtils.closeResources(connection, statement);
+        }
+
     }
 
     @Override
     public void update(Project project) throws SQLException {
-        String sql = "UPDATE "+TableNames.project+" SET "+ProjectColumnName.id_projects+" = "+project.getId()+", "+ProjectColumnName.name_projects+" ='"+project.getName()+
-                "', "+ProjectColumnName.cost+" = "+ project.getCost() +" WHERE "+ProjectColumnName.id_projects+" = " + project.getId();
+        String sql = "UPDATE "+TableNames.PROJECT +" SET "+ProjectColumnName.ID_PROJECTS +" = "+project.getId()+", "+ProjectColumnName.NAME_PROJECTS +" ='"+project.getName()+
+                "', "+ProjectColumnName.COST +" = "+ project.getCost() +" WHERE "+ProjectColumnName.ID_PROJECTS +" = " + project.getId();
         System.out.println(sql);
-        Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
+
+        Connection connection = null;
+        Statement statement = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.createStatement();
         statement.executeUpdate(sql);
-        statement.close();
-        connection.close();
+        } finally {
+        JdbcUtils.closeResources(connection, statement);
+        }
     }
 
     @Override
     public void delete(Project project) throws SQLException {
-        String sqlDelDevRefProj = "DELETE FROM "+TableNames.project_developer+" WHERE "+ProjectDeveloperColumnName.id_project+" = " + project.getId();
-        String sqlDelCustRefProj = "DELETE FROM "+TableNames.customer_project+" WHERE "+CustomerProjectColumnName.id_project+" = " + project.getId();
-        String sqlDelCompRefProj = "DELETE FROM "+TableNames.compani_project+" WHERE "+CompaniProjectColumnName.id_project+" = " + project.getId();
-        String sqlDelProj = "DELETE FROM "+TableNames.project+" WHERE "+ProjectColumnName.id_projects+" = " + project.getId();
-        Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
+        String sqlDelDevRefProj = "DELETE FROM "+TableNames.PROJECT_DEVELOPER +" WHERE "+ProjectDeveloperColumnName.ID_PROJECT +" = " + project.getId();
+        String sqlDelCustRefProj = "DELETE FROM "+TableNames.CUSTOMER_PROJECT +" WHERE "+CustomerProjectColumnName.ID_PROJECT +" = " + project.getId();
+        String sqlDelCompRefProj = "DELETE FROM "+TableNames.COMPANI_PROJECT +" WHERE "+CompaniProjectColumnName.ID_PROJECT +" = " + project.getId();
+        String sqlDelProj = "DELETE FROM "+TableNames.PROJECT +" WHERE "+ProjectColumnName.ID_PROJECTS +" = " + project.getId();
+
+        Connection connection = null;
+        Statement statement = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.createStatement();
         statement.executeUpdate(sqlDelDevRefProj);
         statement.executeUpdate(sqlDelCustRefProj);
         statement.executeUpdate(sqlDelCompRefProj);
         statement.executeUpdate(sqlDelProj);
-        statement.close();
-        connection.close();
+        } finally {
+        JdbcUtils.closeResources(connection, statement);
+        }
     }
 }

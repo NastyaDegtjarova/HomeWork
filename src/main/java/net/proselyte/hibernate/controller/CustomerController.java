@@ -13,7 +13,13 @@ import java.util.Scanner;
 /**
  * Created by Nastya on 20.11.2017.
  */
-public class CustomerController {
+public class CustomerController extends AbstractController{
+    private static final int CREATE_CUSTOMER = 1;
+    private static final int VIEW_ALL_CUSTOMER = 2;
+    private static final int UPDATE_CUSTOMER = 3;
+    private static final int DELETE_CUSTOMER = 4;
+    private static final int VIEW_ID_CUSTOMER = 5;
+    private static final int PREVIOUS_MENU = 0;
     private CustomerDAO customerDAO;
     private ProjectDAO projectDAO;
     private Scanner scan;
@@ -26,38 +32,44 @@ public class CustomerController {
 
     public void menu() {
         while(true) {
-            System.out.println("1 - Create new customer");
-            System.out.println("2 - View customer");
-            System.out.println("3 - Update customer");
-            System.out.println("4 - Delete customer");
-            System.out.println("5 - View all customer");
+            System.out.println("1 - Create new CUSTOMER");
+            System.out.println("2 - View all CUSTOMER");
+            System.out.println("3 - Update CUSTOMER");
+            System.out.println("4 - Delete CUSTOMER");
+            System.out.println("5 - View CUSTOMER");
             System.out.println("0 - Previous menu");
 
-            int choise = 0;
-            if (scan.hasNextInt()) {
-                choise = scan.nextInt();
-                if (choise == 1) {
-                    createNewCustomer();
-                } else if (choise == 2) {
-                    showCustomById();
-                } else if (choise == 3) {
-                    changeCustomer();
-                } else if (choise == 4) {
-                    deleteCustomer();
-                } else if (choise == 5) {
-                    showAllCustom();
-                } else if (choise == 0) {
-                    break;
-                }  else {
-                    System.out.println("Input incorrect");
+            if (getScan().hasNextInt()) {
+                int choise = getScan().nextInt();
+                switch (choise) {
+                    case CREATE_CUSTOMER:
+                        createNewCustomer();
+                        break;
+                    case VIEW_ALL_CUSTOMER:
+                        showAllCustom();
+                        break;
+                    case UPDATE_CUSTOMER:
+                        changeCustomer();
+                        break;
+                    case DELETE_CUSTOMER:
+                        deleteCustomer();
+                        break;
+                    case VIEW_ID_CUSTOMER:
+                        showCustomById();
+                        break;
+                    case PREVIOUS_MENU:
+                        break;
+                    default:
+                        break;
                 }
             }
+
         }
 
     }
 
     private void showCustomById() {
-        System.out.println("Input customer id");
+        System.out.println("Input CUSTOMER id");
         long customId = scan.nextLong();
         try {
             Customer customer = customerDAO.getById(customId);
@@ -92,7 +104,7 @@ public class CustomerController {
     }
 
     private void deleteCustomer() {
-        System.out.println("Input customer id");
+        System.out.println("Input CUSTOMER id");
         long customerId = scan.nextLong();
         try {
             customerDAO.delete(new Customer(customerId));
@@ -102,7 +114,7 @@ public class CustomerController {
     }
 
     private void changeCustomer() {
-        System.out.println("Input customer id");
+        System.out.println("Input CUSTOMER id");
         long customerId = scan.nextLong();
         System.out.println("Input firstNameCustomer");
         scan.nextLine();
@@ -117,7 +129,7 @@ public class CustomerController {
     }
 
     private void createNewCustomer() {
-        System.out.println("Input customer id");
+        System.out.println("Input CUSTOMER id");
         long customerId = scan.nextLong();
         System.out.println("Input firstNameCustomer");
         scan.nextLine();

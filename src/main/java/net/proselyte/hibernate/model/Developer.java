@@ -89,7 +89,7 @@ public class Developer {
                         ? "[]"
                         :skills.stream().map(Skill::getSpecialty).collect(Collectors.toList())) + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", salary=" + salary +
+                ", SALARY=" + salary +
                 '}';
     }
 

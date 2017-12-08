@@ -28,110 +28,144 @@ public class JdbcSkillDAOImpl implements SkillDAO {
 
     @Override
     public Skill getById(Long id) throws SQLException {
-        String sql = "SELECT * FROM "+ TableNames.skill+" WHERE "+ SkillColumnNames.id_skills+" = ?";
-        Connection connection = ConnectionUtil.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        String sql = String.format("SELECT * FROM %s WHERE %s = ?", TableNames.SKILL, SkillColumnNames.ID_SKILLS);
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.prepareStatement(sql);
         statement.setLong(1, id);
-        ResultSet resultSet = statement.executeQuery();
+        resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
             Skill skill = new Skill();
-            Long skillId = resultSet.getLong(SkillColumnNames.id_skills.name());
-            String specialty = resultSet.getString(SkillColumnNames.specialty.name());
+            Long skillId = resultSet.getLong(SkillColumnNames.ID_SKILLS.name());
+            String specialty = resultSet.getString(SkillColumnNames.SPECIALTY.name());
 
             skill.withIdSkill(skillId)
                     .withSpecialty(specialty);
             return skill;
         }else {
-            System.out.println("No skill with this ID!!!");
+            System.out.println("No SKILL with this ID!!!");
         }
-        resultSet.close();
-        statement.close();
-        connection.close();
+        } finally {
+            JdbcUtils.closeResources(connection, statement, resultSet);
+        }
         return null;
     }
 
     @Override
     public List<Skill> getAll() throws SQLException {
         List<Skill> skills = new ArrayList<>();
-        String sql = "SELECT * FROM "+TableNames.skill+"";
-        Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
+        String sql = String.format( "SELECT * FROM %s ",TableNames.SKILL);
+
+            Connection connection = null;
+            Statement statement = null;
+            ResultSet resultSet = null;
+            try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.createStatement();
+        resultSet = statement.executeQuery(sql);
 
         while (resultSet.next()) {
             Skill skill = new Skill();
-            Long skillId = resultSet.getLong(SkillColumnNames.id_skills.name());
-            String specialty = resultSet.getString(SkillColumnNames.specialty.name());
+            Long skillId = resultSet.getLong(SkillColumnNames.ID_SKILLS.name());
+            String specialty = resultSet.getString(SkillColumnNames.SPECIALTY.name());
 
             skill.withIdSkill(skillId)
                     .withSpecialty(specialty);
 
             skills.add(skill);
         }
-        resultSet.close();
-        statement.close();
-        connection.close();
-        return skills;
+            } finally {
+                JdbcUtils.closeResources(connection, statement, resultSet);
+            }
+        return null;
     }
 
     @Override
     public void save(Skill skill) throws SQLException {
-        String sql = "INSERT INTO "+TableNames.skill+" ("+SkillColumnNames.id_skills+", "+SkillColumnNames.specialty+") VALUES " +
+        String sql = "INSERT INTO "+TableNames.SKILL +" ("+SkillColumnNames.ID_SKILLS +", "+SkillColumnNames.SPECIALTY +") VALUES " +
                 "("+skill.getIdSkill()+ ",'" + skill.getSpecialty()+"')";
         System.out.println(sql);
-        Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
+
+        Connection connection = null;
+        Statement statement = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.createStatement();
         statement.executeUpdate(sql);
-        statement.close();
-        connection.close();
+                } finally {
+                    JdbcUtils.closeResources(connection, statement);
+                }
+
     }
 
     @Override
     public void update(Skill skill) throws SQLException {
-        String sql = "UPDATE "+TableNames.skill+" SET "+SkillColumnNames.id_skills+" = "+skill.getIdSkill()+", "+SkillColumnNames.specialty+"='"+skill.getSpecialty()
-                +"' WHERE "+SkillColumnNames.id_skills+" = " + skill.getIdSkill();
+        String sql = "UPDATE "+TableNames.SKILL +" SET "+SkillColumnNames.ID_SKILLS +" = "+skill.getIdSkill()+", "+SkillColumnNames.SPECIALTY +"='"+skill.getSpecialty()
+                +"' WHERE "+SkillColumnNames.ID_SKILLS +" = " + skill.getIdSkill();
         System.out.println(sql);
-        Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
+
+           Connection connection = null;
+           Statement statement = null;
+
+           try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.createStatement();
         statement.executeUpdate(sql);
-        statement.close();
-        connection.close();
+           } finally {
+               JdbcUtils.closeResources(connection, statement);
+           }
     }
 
     @Override
     public void delete(Skill skill) throws SQLException {
-        String sqlDelDevRefSkill = "DELETE FROM "+TableNames.developer_skill+" WHERE "+ DeveloperSkillColumnName.id_skill+" = " + skill.getIdSkill();
-        String sqlDelDev = "DELETE FROM "+TableNames.skill+" WHERE "+SkillColumnNames.id_skills+" = " + skill.getIdSkill();
-        Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
+        String sqlDelDevRefSkill = "DELETE FROM "+TableNames.DEVELOPER_SKILL +" WHERE "+ DeveloperSkillColumnName.ID_SKILL +" = " + skill.getIdSkill();
+        String sqlDelDev = "DELETE FROM "+TableNames.SKILL +" WHERE "+SkillColumnNames.ID_SKILLS +" = " + skill.getIdSkill();
+
+        Connection connection = null;
+        Statement statement = null;
+
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.createStatement();
         statement.executeUpdate(sqlDelDevRefSkill);
         statement.executeUpdate(sqlDelDev);
-        statement.close();
-        connection.close();
+    } finally {
+        JdbcUtils.closeResources(connection, statement);
+    }
+
     }
 
     @Override
     public List<Skill> getByDevId(Long id) throws SQLException {
         List<Skill> skills = new ArrayList<>();
-        String sql = "SELECT * FROM "+TableNames.skill+" ";
-        Connection connection = ConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
+        String sql = "SELECT * FROM "+TableNames.SKILL +" ";
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+        connection = ConnectionUtil.getConnection();
+        statement = connection.createStatement();
+        resultSet = statement.executeQuery(sql);
 
         while (resultSet.next()) {
             Skill skill = new Skill();
-            Long skillId = resultSet.getLong(SkillColumnNames.id_skills.name());
-            String specialty = resultSet.getString(SkillColumnNames.specialty.name());
+            Long skillId = resultSet.getLong(SkillColumnNames.ID_SKILLS.name());
+            String specialty = resultSet.getString(SkillColumnNames.SPECIALTY.name());
 
             skill.withIdSkill(skillId)
                     .withSpecialty(specialty);
 
             skills.add(skill);
         }
-        resultSet.close();
-        statement.close();
-        connection.close();
-        return skills;
+    } finally {
+        JdbcUtils.closeResources(connection, statement, resultSet);
+        }
+        return null;
     }
 }
