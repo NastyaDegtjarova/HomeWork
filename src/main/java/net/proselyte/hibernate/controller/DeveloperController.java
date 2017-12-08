@@ -4,6 +4,8 @@ import net.proselyte.hibernate.dao.DeveloperDAO;
 import net.proselyte.hibernate.dao.ProjectDAO;
 import net.proselyte.hibernate.dao.SkillDAO;
 import net.proselyte.hibernate.model.Developer;
+import net.proselyte.hibernate.model.Project;
+import net.proselyte.hibernate.model.Skill;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -62,7 +64,7 @@ public class DeveloperController extends AbstractController {
                         showDevById();
                         break;
                     case PREVIOUS_MENU:
-                        break;
+                        return;
                     default:
                         break;
                 }
@@ -113,8 +115,21 @@ public class DeveloperController extends AbstractController {
             List<Developer> developers = developerDAO.getAll();
             for(int i = 0; i < developers.size(); i++){
                 Developer developer = developers.get(i);
+                setDeps(developer);
                 System.out.println(developer);
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setDeps(Developer developer) {
+        try {
+            List<Project> projects = projectDAO.getByDevId(developer.getId());
+            developer.setProjects(projects);
+            List<Skill> skills = skillDAO.getByDevId(developer.getId());
+            developer.setSkills(skills);
 
         } catch (SQLException e) {
             e.printStackTrace();

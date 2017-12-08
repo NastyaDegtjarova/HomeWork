@@ -57,7 +57,7 @@ public class CompanyController extends AbstractController{
                         showCompanById();
                         break;
                     case PREVIOUS_MENU:
-                        break;
+                        return;
                     default:
                         break;
                 }

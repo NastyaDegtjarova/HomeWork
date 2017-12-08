@@ -58,7 +58,7 @@ public class CustomerController extends AbstractController{
                         showCustomById();
                         break;
                     case PREVIOUS_MENU:
-                        break;
+                        return;
                     default:
                         break;
                 }

@@ -57,7 +57,7 @@ public class SkillController extends AbstractController{
                         showSkilById();
                         break;
                     case PREVIOUS_MENU:
-                        break;
+                        return;
                     default:
                         break;
                 }

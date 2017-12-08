@@ -68,7 +68,7 @@ public class ProjectController extends AbstractController{
                         showProjById();
                         break;
                     case PREVIOUS_MENU:
-                        break;
+                        return;
                     default:
                         break;
                 }

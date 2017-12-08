@@ -28,7 +28,9 @@ public class JdbcSkillDAOImpl implements SkillDAO {
 
     @Override
     public Skill getById(Long id) throws SQLException {
-        String sql = String.format("SELECT * FROM %s WHERE %s = ?", TableNames.SKILL, SkillColumnNames.ID_SKILLS);
+        String sql = String.format("SELECT * FROM %s WHERE %s = ?",
+                TableNames.SKILL,
+                SkillColumnNames.ID_SKILLS);
 
         Connection connection = null;
         PreparedStatement statement = null;
@@ -59,7 +61,8 @@ public class JdbcSkillDAOImpl implements SkillDAO {
     @Override
     public List<Skill> getAll() throws SQLException {
         List<Skill> skills = new ArrayList<>();
-        String sql = String.format( "SELECT * FROM %s ",TableNames.SKILL);
+        String sql = String.format( "SELECT * FROM %s ",
+                TableNames.SKILL);
 
             Connection connection = null;
             Statement statement = null;
@@ -87,8 +90,15 @@ public class JdbcSkillDAOImpl implements SkillDAO {
 
     @Override
     public void save(Skill skill) throws SQLException {
-        String sql = "INSERT INTO "+TableNames.SKILL +" ("+SkillColumnNames.ID_SKILLS +", "+SkillColumnNames.SPECIALTY +") VALUES " +
-                "("+skill.getIdSkill()+ ",'" + skill.getSpecialty()+"')";
+//        String sql = "INSERT INTO "+TableNames.SKILL +" ("+SkillColumnNames.ID_SKILLS +", "+SkillColumnNames.SPECIALTY +") VALUES " +
+//                "("+skill.getIdSkill()+ ",'" + skill.getSpecialty()+"')";
+
+        String sql = String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)",
+                TableNames.SKILL,
+                SkillColumnNames.ID_SKILLS,
+                SkillColumnNames.SPECIALTY,
+                skill.getIdSkill(),
+                skill.getSpecialty());
         System.out.println(sql);
 
         Connection connection = null;
@@ -105,17 +115,26 @@ public class JdbcSkillDAOImpl implements SkillDAO {
 
     @Override
     public void update(Skill skill) throws SQLException {
-        String sql = "UPDATE "+TableNames.SKILL +" SET "+SkillColumnNames.ID_SKILLS +" = "+skill.getIdSkill()+", "+SkillColumnNames.SPECIALTY +"='"+skill.getSpecialty()
-                +"' WHERE "+SkillColumnNames.ID_SKILLS +" = " + skill.getIdSkill();
+//        String sql = "UPDATE "+TableNames.SKILL +" SET "+SkillColumnNames.ID_SKILLS +" = "+skill.getIdSkill()+", "+SkillColumnNames.SPECIALTY +"='"+skill.getSpecialty()
+//                +"' WHERE "+SkillColumnNames.ID_SKILLS +" = " + skill.getIdSkill();
+
+        String sql = String.format("UPDATE %s SET %s = ?, %s = ? WHERE %s = ?",
+                TableNames.SKILL,
+                SkillColumnNames.ID_SKILLS,
+                SkillColumnNames.SPECIALTY,
+                SkillColumnNames.ID_SKILLS);
         System.out.println(sql);
 
            Connection connection = null;
-           Statement statement = null;
+           PreparedStatement statement = null;
 
            try {
         connection = ConnectionUtil.getConnection();
-        statement = connection.createStatement();
-        statement.executeUpdate(sql);
+        statement = connection.prepareStatement(sql);
+               statement.setLong(1, skill.getIdSkill());
+               statement.setString(2, skill.getSpecialty());
+               statement.setLong(3, skill.getIdSkill());
+        statement.executeUpdate();
            } finally {
                JdbcUtils.closeResources(connection, statement);
            }
@@ -123,17 +142,28 @@ public class JdbcSkillDAOImpl implements SkillDAO {
 
     @Override
     public void delete(Skill skill) throws SQLException {
-        String sqlDelDevRefSkill = "DELETE FROM "+TableNames.DEVELOPER_SKILL +" WHERE "+ DeveloperSkillColumnName.ID_SKILL +" = " + skill.getIdSkill();
-        String sqlDelDev = "DELETE FROM "+TableNames.SKILL +" WHERE "+SkillColumnNames.ID_SKILLS +" = " + skill.getIdSkill();
+//        String sqlDelDevRefSkill = "DELETE FROM "+TableNames.DEVELOPER_SKILL +" WHERE "+ DeveloperSkillColumnName.ID_SKILL +" = " + skill.getIdSkill();
+//        String sqlDelDev = "DELETE FROM "+TableNames.SKILL +" WHERE "+SkillColumnNames.ID_SKILLS +" = " + skill.getIdSkill();
+
+        String sqlDelDevRefSkill = String.format("DELETE FROM %s WHERE %s = ?",
+                TableNames.DEVELOPER_SKILL,
+                DeveloperSkillColumnName.ID_SKILL);
+        String sqlDelDev = String.format("DELETE FROM %s WHERE %s = ?",
+                TableNames.SKILL,
+                SkillColumnNames.ID_SKILLS);
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
 
         try {
         connection = ConnectionUtil.getConnection();
-        statement = connection.createStatement();
-        statement.executeUpdate(sqlDelDevRefSkill);
-        statement.executeUpdate(sqlDelDev);
+        statement = connection.prepareStatement(sqlDelDevRefSkill);
+            statement.setLong(1, skill.getIdSkill());
+            statement.executeUpdate();
+        statement = connection.prepareStatement(sqlDelDev);
+            statement.setLong(1, skill.getIdSkill());
+            statement.executeUpdate();
+
     } finally {
         JdbcUtils.closeResources(connection, statement);
     }
@@ -143,7 +173,16 @@ public class JdbcSkillDAOImpl implements SkillDAO {
     @Override
     public List<Skill> getByDevId(Long id) throws SQLException {
         List<Skill> skills = new ArrayList<>();
-        String sql = "SELECT * FROM "+TableNames.SKILL +" ";
+
+        String sql = String.format("SELECT s.%s, %s FROM %s s, %s ds WHERE s.%s = ds.%s AND ds.%s = ?",
+                SkillColumnNames.ID_SKILLS,
+                SkillColumnNames.SPECIALTY,
+                TableNames.SKILL,
+                TableNames.DEVELOPER_SKILL,
+                SkillColumnNames.ID_SKILLS,
+                DeveloperSkillColumnName.ID_SKILL,
+                DeveloperSkillColumnName.ID_DEVELOPER);
+
 
         Connection connection = null;
         Statement statement = null;

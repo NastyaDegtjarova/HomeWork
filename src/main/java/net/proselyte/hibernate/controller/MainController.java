@@ -69,7 +69,7 @@ public class MainController extends AbstractController {
                         projectController.menu();
                         break;
                     case EXIT:
-                        break;
+                        return;
                     default:
                         break;
                 }
