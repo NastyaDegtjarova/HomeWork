@@ -104,7 +104,7 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
     } finally {
         JdbcUtils.closeResources(connection, statement, resultSet);
         }
-        return null;
+        return projects;
     }
 
     @Override
@@ -148,7 +148,7 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
         } finally {
         JdbcUtils.closeResources(connection, statement, resultSet);
         }
-        return null;
+        return projects;
     }
 
     @Override
@@ -192,7 +192,7 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
         } finally {
         JdbcUtils.closeResources(connection, statement, resultSet);
         }
-        return null;
+        return projects;
     }
 
     @Override
@@ -224,7 +224,7 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
         } finally {
         JdbcUtils.closeResources(connection, statement, resultSet);
         }
-        return null;
+        return projects;
     }
 
     @Override
@@ -262,7 +262,7 @@ public class JdbcProjectDAOImpl implements ProjectDAO {
 //                "', "+ProjectColumnName.COST +" = "+ project.getCost() +" WHERE "+ProjectColumnName.ID_PROJECTS +" = "
 //                  + project.getId();
 
-        String sql = String.format("UPDATE %s SET %s = ?, %s = ?, %s WHERE %s = ?",
+        String sql = String.format("UPDATE %s SET %s = ?, %s = ?, %s = ? WHERE %s = ?",
                 TableNames.PROJECT,
                 ProjectColumnName.ID_PROJECTS,
                 ProjectColumnName.NAME_PROJECTS,

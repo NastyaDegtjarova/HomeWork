@@ -37,26 +37,26 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.prepareStatement(sql);
-        statement.setLong(1, id);
-        resultSet = statement.executeQuery();
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            resultSet = statement.executeQuery();
 
-        if (resultSet.next()) {
-            Developer developer = new Developer();
-            Long developerId = resultSet.getLong(DeveloperColumnNames.ID_DEVELOPER.name());
-            String firstName = resultSet.getString(DeveloperColumnNames.FIRST_NAME.name());
-            String lastName = resultSet.getString(DeveloperColumnNames.LAST_NAME.name());
-            BigDecimal salary = resultSet.getBigDecimal(DeveloperColumnNames.SALARY.name());
+            if (resultSet.next()) {
+                Developer developer = new Developer();
+                Long developerId = resultSet.getLong(DeveloperColumnNames.ID_DEVELOPER.name());
+                String firstName = resultSet.getString(DeveloperColumnNames.FIRST_NAME.name());
+                String lastName = resultSet.getString(DeveloperColumnNames.LAST_NAME.name());
+                BigDecimal salary = resultSet.getBigDecimal(DeveloperColumnNames.SALARY.name());
 
-            developer.withId(developerId)
-                    .withFirstName(firstName)
-                    .withLastName(lastName)
-                    .withSalary(salary);
-            return developer;
-        }else {
-            System.out.println("No DEVELOPER with this ID!!!");
-        }
+                developer.withId(developerId)
+                        .withFirstName(firstName)
+                        .withLastName(lastName)
+                        .withSalary(salary);
+                return developer;
+            } else {
+                System.out.println("No DEVELOPER with this ID!!!");
+            }
 
         } finally {
             JdbcUtils.closeResources(connection, statement, resultSet);
@@ -74,29 +74,29 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.createStatement();
-        resultSet = statement.executeQuery(sql);
+            connection = ConnectionUtil.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
 
-        while (resultSet.next()) {
-            Developer developer = new Developer();
-            Long developerId = resultSet.getLong(DeveloperColumnNames.ID_DEVELOPER.name());
-            String firstName = resultSet.getString(DeveloperColumnNames.FIRST_NAME.name());
-            String lastName = resultSet.getString(DeveloperColumnNames.LAST_NAME.name());
-            BigDecimal salary = resultSet.getBigDecimal(DeveloperColumnNames.SALARY.name());
+            while (resultSet.next()) {
+                Developer developer = new Developer();
+                Long developerId = resultSet.getLong(DeveloperColumnNames.ID_DEVELOPER.name());
+                String firstName = resultSet.getString(DeveloperColumnNames.FIRST_NAME.name());
+                String lastName = resultSet.getString(DeveloperColumnNames.LAST_NAME.name());
+                BigDecimal salary = resultSet.getBigDecimal(DeveloperColumnNames.SALARY.name());
 
-            developer.withId(developerId)
-                    .withFirstName(firstName)
-                    .withLastName(lastName)
-                    .withSalary(salary);
+                developer.withId(developerId)
+                        .withFirstName(firstName)
+                        .withLastName(lastName)
+                        .withSalary(salary);
 
-            developers.add(developer);
-        }
+                developers.add(developer);
+            }
 
         } finally {
             JdbcUtils.closeResources(connection, statement, resultSet);
         }
-        return null;
+        return developers;
     }
 
     @Override
@@ -117,35 +117,35 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
                 DeveloperColumnNames.ID_DEVELOPER,
                 ProjectDeveloperColumnName.ID_DEVELOPER,
                 ProjectDeveloperColumnName.ID_PROJECT);
-            System.out.println(sql);
+        System.out.println(sql);
 
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.prepareStatement(sql);
-        statement.setLong(1, projId);
-        resultSet = statement.executeQuery();
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, projId);
+            resultSet = statement.executeQuery();
 
-        while (resultSet.next()) {
-            Developer developer = new Developer();
-            Long developerId = resultSet.getLong(DeveloperColumnNames.ID_DEVELOPER.name());
-            String firstName = resultSet.getString(DeveloperColumnNames.FIRST_NAME.name());
-            String lastName = resultSet.getString(DeveloperColumnNames.LAST_NAME.name());
-            BigDecimal salary = resultSet.getBigDecimal(DeveloperColumnNames.SALARY.name());
+            while (resultSet.next()) {
+                Developer developer = new Developer();
+                Long developerId = resultSet.getLong(DeveloperColumnNames.ID_DEVELOPER.name());
+                String firstName = resultSet.getString(DeveloperColumnNames.FIRST_NAME.name());
+                String lastName = resultSet.getString(DeveloperColumnNames.LAST_NAME.name());
+                BigDecimal salary = resultSet.getBigDecimal(DeveloperColumnNames.SALARY.name());
 
-            developer.withId(developerId)
-                    .withFirstName(firstName)
-                    .withLastName(lastName)
-                    .withSalary(salary);
+                developer.withId(developerId)
+                        .withFirstName(firstName)
+                        .withLastName(lastName)
+                        .withSalary(salary);
 
-            developers.add(developer);
+                developers.add(developer);
+            }
+
+        } finally {
+            JdbcUtils.closeResources(connection, statement, resultSet);
         }
-
-    } finally {
-        JdbcUtils.closeResources(connection, statement, resultSet);
-    }
         return null;
     }
 
@@ -164,31 +164,31 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
                 SkillColumnNames.ID_SKILLS,
                 DeveloperSkillColumnName.ID_SKILL,
                 DeveloperSkillColumnName.ID_DEVELOPER);
-            System.out.println(sql);
+        System.out.println(sql);
 
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.prepareStatement(sql);
-        statement.setLong(1, skillId);
-        resultSet = statement.executeQuery();
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, skillId);
+            resultSet = statement.executeQuery();
 
-        while (resultSet.next()) {
-            Developer developer = new Developer();
-            Long developerId = resultSet.getLong(DeveloperColumnNames.ID_DEVELOPER.name());
-            String firstName = resultSet.getString(DeveloperColumnNames.FIRST_NAME.name());
-            String lastName = resultSet.getString(DeveloperColumnNames.LAST_NAME.name());
-            BigDecimal salary = resultSet.getBigDecimal(DeveloperColumnNames.SALARY.name());
+            while (resultSet.next()) {
+                Developer developer = new Developer();
+                Long developerId = resultSet.getLong(DeveloperColumnNames.ID_DEVELOPER.name());
+                String firstName = resultSet.getString(DeveloperColumnNames.FIRST_NAME.name());
+                String lastName = resultSet.getString(DeveloperColumnNames.LAST_NAME.name());
+                BigDecimal salary = resultSet.getBigDecimal(DeveloperColumnNames.SALARY.name());
 
-            developer.withId(developerId)
-                    .withFirstName(firstName)
-                    .withLastName(lastName)
-                    .withSalary(salary);
+                developer.withId(developerId)
+                        .withFirstName(firstName)
+                        .withLastName(lastName)
+                        .withSalary(salary);
 
-            developers.add(developer);
-        }
+                developers.add(developer);
+            }
 
         } finally {
             JdbcUtils.closeResources(connection, statement, resultSet);
@@ -213,16 +213,16 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.prepareStatement(sql);
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sql);
             statement.setLong(1, developer.getId());
             statement.setString(2, developer.getFirstName());
             statement.setString(3, developer.getLastName());
             statement.setBigDecimal(4, developer.getSalary());
-        statement.executeUpdate();
-    } finally {
-        JdbcUtils.closeResources(connection, statement);
-    }
+            statement.executeUpdate();
+        } finally {
+            JdbcUtils.closeResources(connection, statement);
+        }
 
     }
 
@@ -246,16 +246,16 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.prepareStatement(sql);
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sql);
             statement.setLong(1, developer.getId());
             statement.setString(2, developer.getFirstName());
             statement.setString(3, developer.getLastName());
             statement.setBigDecimal(4, developer.getSalary());
             statement.setLong(5, developer.getId());
-        statement.executeUpdate();
-    } finally {
-        JdbcUtils.closeResources(connection, statement);
+            statement.executeUpdate();
+        } finally {
+            JdbcUtils.closeResources(connection, statement);
         }
     }
 
@@ -278,19 +278,19 @@ public class JdbcDeveloperDAOImpl implements DeveloperDAO {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.prepareStatement(sqlDelDevRefSkill);
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sqlDelDevRefSkill);
             statement.setLong(1, developer.getId());
             statement.executeUpdate();
-        statement = connection.prepareStatement(sqlDelDevRefProj);
+            statement = connection.prepareStatement(sqlDelDevRefProj);
             statement.setLong(1, developer.getId());
             statement.executeUpdate();
-        statement = connection.prepareStatement(sqlDelDev);
+            statement = connection.prepareStatement(sqlDelDev);
             statement.setLong(1, developer.getId());
             statement.executeUpdate();
 
         } finally {
-        JdbcUtils.closeResources(connection, statement);
+            JdbcUtils.closeResources(connection, statement);
         }
     }
 }

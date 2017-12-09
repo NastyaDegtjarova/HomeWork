@@ -90,7 +90,7 @@ public class JdbcCustomerDAOImpl implements CustomerDAO {
              } finally {
             JdbcUtils.closeResources(connection, statement, resultSet);
              }
-        return null;
+        return customers;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class JdbcCustomerDAOImpl implements CustomerDAO {
 //                +" cp WHERE c."+CustomerColumnNames.ID_CUSTOMERS +" = cp."+ CustomerProjectColumnName.ID_CUSTOMER +" AND cp."
 //                +CustomerProjectColumnName.ID_PROJECT +" = ?";
 
-        String sql = String.format("SELECT с.%s, %s, %s FROM %s с, %s cp WHERE c.%s = cp.%s AND cp.%s = ?",
+        String sql = String.format("SELECT c.%s, %s, %s FROM %s c, %s cp WHERE c.%s = cp.%s AND cp.%s = ?",
                 CustomerColumnNames.ID_CUSTOMERS,
                 CustomerColumnNames.FIRST_NAME_CUSTOMERS,
                 CustomerColumnNames.LAST_NAME_CUSTOMERS,
@@ -188,7 +188,7 @@ public class JdbcCustomerDAOImpl implements CustomerDAO {
             statement.setLong(1, customer.getIdCustomer());
             statement.setString(2, customer.getFirstNameCust());
             statement.setString(3, customer.getLastNameCust());
-            statement.setLong(1, customer.getIdCustomer());
+            statement.setLong(4, customer.getIdCustomer());
 
         statement.executeUpdate();
 

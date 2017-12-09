@@ -91,7 +91,7 @@ public class JdbcCompanieDAOImpl implements CompanieDAO {
         } finally {
             JdbcUtils.closeResources(connection, statement, resultSet);
         }
-        return null;
+        return companies;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class JdbcCompanieDAOImpl implements CompanieDAO {
 // WHERE c." + CompanyColumnNames.ID_COMPANIES
 //                + " = cp." + CompaniProjectColumnName.ID_COMPANI + " AND cp." + CompaniProjectColumnName.ID_PROJECT + " = ?";
 
-        String sql = String.format("SELECT с.%s, %s FROM %s с, %s cp WHERE c.%s = cp.%s AND cp.%s = ?",
+        String sql = String.format("SELECT c.%s, %s FROM %s c, %s cp WHERE c.%s = cp.%s AND cp.%s = ?",
                 CompanyColumnNames.ID_COMPANIES,
                 CompanyColumnNames.NAME_COMPANIES,
                 TableNames.COMPANIE,
@@ -134,7 +134,7 @@ public class JdbcCompanieDAOImpl implements CompanieDAO {
         } finally {
             JdbcUtils.closeResources(connection, statement, resultSet);
         }
-        return null;
+        return companies;
     }
 
     @Override

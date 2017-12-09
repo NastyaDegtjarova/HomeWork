@@ -36,22 +36,22 @@ public class JdbcSkillDAOImpl implements SkillDAO {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.prepareStatement(sql);
-        statement.setLong(1, id);
-        resultSet = statement.executeQuery();
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+            resultSet = statement.executeQuery();
 
-        if (resultSet.next()) {
-            Skill skill = new Skill();
-            Long skillId = resultSet.getLong(SkillColumnNames.ID_SKILLS.name());
-            String specialty = resultSet.getString(SkillColumnNames.SPECIALTY.name());
+            if (resultSet.next()) {
+                Skill skill = new Skill();
+                Long skillId = resultSet.getLong(SkillColumnNames.ID_SKILLS.name());
+                String specialty = resultSet.getString(SkillColumnNames.SPECIALTY.name());
 
-            skill.withIdSkill(skillId)
-                    .withSpecialty(specialty);
-            return skill;
-        }else {
-            System.out.println("No SKILL with this ID!!!");
-        }
+                skill.withIdSkill(skillId)
+                        .withSpecialty(specialty);
+                return skill;
+            } else {
+                System.out.println("No SKILL with this ID!!!");
+            }
         } finally {
             JdbcUtils.closeResources(connection, statement, resultSet);
         }
@@ -61,31 +61,31 @@ public class JdbcSkillDAOImpl implements SkillDAO {
     @Override
     public List<Skill> getAll() throws SQLException {
         List<Skill> skills = new ArrayList<>();
-        String sql = String.format( "SELECT * FROM %s ",
+        String sql = String.format("SELECT * FROM %s ",
                 TableNames.SKILL);
 
-            Connection connection = null;
-            Statement statement = null;
-            ResultSet resultSet = null;
-            try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.createStatement();
-        resultSet = statement.executeQuery(sql);
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = ConnectionUtil.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
 
-        while (resultSet.next()) {
-            Skill skill = new Skill();
-            Long skillId = resultSet.getLong(SkillColumnNames.ID_SKILLS.name());
-            String specialty = resultSet.getString(SkillColumnNames.SPECIALTY.name());
+            while (resultSet.next()) {
+                Skill skill = new Skill();
+                Long skillId = resultSet.getLong(SkillColumnNames.ID_SKILLS.name());
+                String specialty = resultSet.getString(SkillColumnNames.SPECIALTY.name());
 
-            skill.withIdSkill(skillId)
-                    .withSpecialty(specialty);
+                skill.withIdSkill(skillId)
+                        .withSpecialty(specialty);
 
-            skills.add(skill);
-        }
-            } finally {
-                JdbcUtils.closeResources(connection, statement, resultSet);
+                skills.add(skill);
             }
-        return null;
+        } finally {
+            JdbcUtils.closeResources(connection, statement, resultSet);
+        }
+        return skills;
     }
 
     @Override
@@ -102,14 +102,16 @@ public class JdbcSkillDAOImpl implements SkillDAO {
         System.out.println(sql);
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.createStatement();
-        statement.executeUpdate(sql);
-                } finally {
-                    JdbcUtils.closeResources(connection, statement);
-                }
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, skill.getIdSkill());
+            statement.setString(2, skill.getSpecialty());
+            statement.executeUpdate();
+        } finally {
+            JdbcUtils.closeResources(connection, statement);
+        }
 
     }
 
@@ -125,19 +127,19 @@ public class JdbcSkillDAOImpl implements SkillDAO {
                 SkillColumnNames.ID_SKILLS);
         System.out.println(sql);
 
-           Connection connection = null;
-           PreparedStatement statement = null;
+        Connection connection = null;
+        PreparedStatement statement = null;
 
-           try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.prepareStatement(sql);
-               statement.setLong(1, skill.getIdSkill());
-               statement.setString(2, skill.getSpecialty());
-               statement.setLong(3, skill.getIdSkill());
-        statement.executeUpdate();
-           } finally {
-               JdbcUtils.closeResources(connection, statement);
-           }
+        try {
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, skill.getIdSkill());
+            statement.setString(2, skill.getSpecialty());
+            statement.setLong(3, skill.getIdSkill());
+            statement.executeUpdate();
+        } finally {
+            JdbcUtils.closeResources(connection, statement);
+        }
     }
 
     @Override
@@ -156,22 +158,22 @@ public class JdbcSkillDAOImpl implements SkillDAO {
         PreparedStatement statement = null;
 
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.prepareStatement(sqlDelDevRefSkill);
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sqlDelDevRefSkill);
             statement.setLong(1, skill.getIdSkill());
             statement.executeUpdate();
-        statement = connection.prepareStatement(sqlDelDev);
+            statement = connection.prepareStatement(sqlDelDev);
             statement.setLong(1, skill.getIdSkill());
             statement.executeUpdate();
 
-    } finally {
-        JdbcUtils.closeResources(connection, statement);
-    }
+        } finally {
+            JdbcUtils.closeResources(connection, statement);
+        }
 
     }
 
     @Override
-    public List<Skill> getByDevId(Long id) throws SQLException {
+    public List<Skill> getByDevId(Long devId) throws SQLException {
         List<Skill> skills = new ArrayList<>();
 
         String sql = String.format("SELECT s.%s, %s FROM %s s, %s ds WHERE s.%s = ds.%s AND ds.%s = ?",
@@ -185,26 +187,27 @@ public class JdbcSkillDAOImpl implements SkillDAO {
 
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-        connection = ConnectionUtil.getConnection();
-        statement = connection.createStatement();
-        resultSet = statement.executeQuery(sql);
+            connection = ConnectionUtil.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, devId);
+            resultSet = statement.executeQuery();
 
-        while (resultSet.next()) {
-            Skill skill = new Skill();
-            Long skillId = resultSet.getLong(SkillColumnNames.ID_SKILLS.name());
-            String specialty = resultSet.getString(SkillColumnNames.SPECIALTY.name());
+            while (resultSet.next()) {
+                Skill skill = new Skill();
+                Long skillId = resultSet.getLong(SkillColumnNames.ID_SKILLS.name());
+                String specialty = resultSet.getString(SkillColumnNames.SPECIALTY.name());
 
-            skill.withIdSkill(skillId)
-                    .withSpecialty(specialty);
+                skill.withIdSkill(skillId)
+                        .withSpecialty(specialty);
 
-            skills.add(skill);
+                skills.add(skill);
+            }
+        } finally {
+            JdbcUtils.closeResources(connection, statement, resultSet);
         }
-    } finally {
-        JdbcUtils.closeResources(connection, statement, resultSet);
-        }
-        return null;
+        return skills;
     }
 }
